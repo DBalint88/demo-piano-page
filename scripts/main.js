@@ -1,11 +1,11 @@
-import { songData } from './songData.js';
+import { songData } from './songData';
 import { createSubmission } from './createSubmission.js';
 import { userProfile } from './userProfile.js';
 import { setWeek } from './setWeek.js';
 import { instructorModal, instructorChoice } from './instructorModal.js';
 import { printSongsList } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
-import { activateUI, callSongList, hideSongList } from './userInterface.js'
+import { activateUI, callSongList, hideSongList, adjustListPosition, handleWindowSize } from './userInterface.js'
 
 // DOM references
 // TO-DO: Test how many of these can be 'const'
@@ -44,7 +44,7 @@ const currentWeek = setWeek();
 // }
 
 // Confirm the instructor, initiate the modal if necessary.
-if (instructor != "balint" && instructor != "rossomando") {
+if (userProfile.instructor != "balint" && userProfile.instructor != "rossomando") {
     instructorModal();
     instructorChoice();
 }
@@ -90,6 +90,7 @@ Check - has the uLevel 2 user submitted all the songs from Level 2?
 // GENERATE THE SONG CONTENT TO THE PAGE
 printSongsList();
 updateStatusLights();
+handleWindowSize()
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
 activateUI();
 let currentSongFbref = ''
@@ -100,60 +101,6 @@ let currentSongSeq = 0
 let currentActiveLevel = ""
 
 
-
-
-
-
-
-async function loadSong(e) {
-  splash.style.display = "none";
-  iframe.style.width = "100%";
-  iframe.style.height = "100%";
-  iframe.src = this.dataset.pdf + "#zoom=118&navpanes=0&pagemode=none";
-  videoLink.href = this.dataset.video;
-  pdfLink.href = this.dataset.pdf +"#zoom=83";
-  currentSongFbref = this.dataset.fbref
-  currentSongTitle = this.textContent
-  currentSongLevel = parseInt(this.dataset.level)
-  currentSongSeq = parseInt(this.dataset.seq)
-  currentSongValue = determineSongValue(currentSongLevel)
-  currentSongAttempts = await countCurrentSongAttempts()
-  console.log('loadSong says: currentSongAttempts = ', currentSongAttempts)
-  updateButtons(); 
-}
-
-function adjustListPosition() {
-  let wrapperHeight = navListWrapper.clientHeight;
-  
-  setTimeout(function(){
-    try {
-      let songList = document.getElementsByClassName('active-song-list')[0]
-      if (typeof songList == "undefined") {
-        songList = document.getElementsByClassName('active-song-list-short-screen')[0]
-      }
-      console.log(songList)
-      let songListHeight = songList.clientHeight;
-
-      if (wrapperHeight >= songListHeight) {
-        console.log('wrapperHeight (' + wrapperHeight + ') >= songListHeight (' + songListHeight + ')')
-        songList.classList.remove('active-song-list-short-screen')
-        songList.classList.add('active-song-list')
-      } else {
-        console.log('wrapperHeight (' + wrapperHeight + ') !>= songListHeight (' + songListHeight + ')')
-        songList.classList.remove('active-song-list')
-        songList.classList.add('active-song-list-short-screen')
-      }
-    } catch {
-      console.log("can't get the height of a div that don't exist.")
-    }
-  }, 1)
-    
-  
-
-  
-}
-
-window.addEventListener('resize', adjustListPosition)
 
 // Submissions need to be named userId + songID + attempts
 
@@ -428,87 +375,87 @@ logoutButton.addEventListener('click', () => {
   signOut(auth)
 })
 
-onAuthStateChanged(auth, async (user) => {
-  // Logic for when the user logs in. If succesful and profile exists, get userLevel & song arrays 
-  if (user) {
-    loginButton.style.display = 'none'
+// onAuthStateChanged(auth, async (user) => {
+//   // Logic for when the user logs in. If succesful and profile exists, get userLevel & song arrays 
+//   if (user) {
+//     loginButton.style.display = 'none'
 
-    // Refer to the userProfile with the same ID as the user.
-    userID = user.uid
+//     // Refer to the userProfile with the same ID as the user.
+//     userID = user.uid
     
 
-    try {
-      // Subscribe to snapshots of userProfile doc
-      const docRef = doc(db, "userProfiles", userID)
-      let docSnap = await getDoc(docRef);
-      if(!docSnap.exists()) {
-        await setDoc(doc(db, "userProfiles", userID), {
-          firstName: (user.displayName).split(" ")[0],
-          lastName: (user.displayName).split(" ")[1],
-          level: 1,
-          role: "student",
-          nick: "",
-          completedSongs: [],
-          pendingSongs: [],
-          failedSongs: [],
-          handicap: 1,
-          userLvl9: "false",
-          instructor: ""
-        })
-        docSnap = await getDoc(docRef);
-      }
+//     try {
+//       // Subscribe to snapshots of userProfile doc
+//       const docRef = doc(db, "userProfiles", userID)
+//       let docSnap = await getDoc(docRef);
+//       if(!docSnap.exists()) {
+//         await setDoc(doc(db, "userProfiles", userID), {
+//           firstName: (user.displayName).split(" ")[0],
+//           lastName: (user.displayName).split(" ")[1],
+//           level: 1,
+//           role: "student",
+//           nick: "",
+//           completedSongs: [],
+//           pendingSongs: [],
+//           failedSongs: [],
+//           handicap: 1,
+//           userLvl9: "false",
+//           instructor: ""
+//         })
+//         docSnap = await getDoc(docRef);
+//       }
       
-      await updateDoc(docRef, {
-        firstName: (user.displayName).split(" ")[0],
-        lastName: (user.displayName).split(" ")[1]
-      })
+//       await updateDoc(docRef, {
+//         firstName: (user.displayName).split(" ")[0],
+//         lastName: (user.displayName).split(" ")[1]
+//       })
       
 
-      onSnapshot(docRef, (doc) => {
-        getUserData(doc)
-        updateStatusLights()
-        updateButtons()
-        updateQuotaDisplay()
-      })
+//       onSnapshot(docRef, (doc) => {
+//         getUserData(doc)
+//         updateStatusLights()
+//         updateButtons()
+//         updateQuotaDisplay()
+//       })
       
-      username = (user.displayName).split(" ")[0];  
-      let nick = await docSnap.get("nick")
-      if (!nick == "") {
-        username = nick
-      }
-      userLastName = (user.displayName).split(" ")[1]
+//       username = (user.displayName).split(" ")[0];  
+//       let nick = await docSnap.get("nick")
+//       if (!nick == "") {
+//         username = nick
+//       }
+//       userLastName = (user.displayName).split(" ")[1]
 
       
 
         
-      const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-      const d = new Date();
-       let day = weekday[d.getDay()];
-      splashGreeting.innerText = (`Happy ${day}, ${username}! Please click a Level on the left to get started.`)
+//       const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+//       const d = new Date();
+//        let day = weekday[d.getDay()];
+//       splashGreeting.innerText = (`Happy ${day}, ${username}! Please click a Level on the left to get started.`)
       
 
-      loadingGif.style.display = 'none'
-      logoutButton.style.display = 'block'
+//       loadingGif.style.display = 'none'
+//       logoutButton.style.display = 'block'
 
-      getUserData(docSnap)
-      const quotaMax = document.getElementsByClassName("quota-max");
-      if (userLvl9 == true) {
-        for (let i = 0; i < quotaMax.length; i++) {
-          quotaMax[i].innerText = "90"
-        }
-      }
-      await getSongs()
+//       getUserData(docSnap)
+//       const quotaMax = document.getElementsByClassName("quota-max");
+//       if (userLvl9 == true) {
+//         for (let i = 0; i < quotaMax.length; i++) {
+//           quotaMax[i].innerText = "90"
+//         }
+//       }
+//       await getSongs()
 
-    }
-    catch(error) {
-      console.log(error)
-    }
+//     }
+//     catch(error) {
+//       console.log(error)
+//     }
     
-  } else {
-    console.log('no user logged in')
-    loginButton.style.display = 'flex'
-    logoutButton.style.display = 'none'
-    clearData()
-    userID = ''
-  }
-});
+//   } else {
+//     console.log('no user logged in')
+//     loginButton.style.display = 'flex'
+//     logoutButton.style.display = 'none'
+//     clearData()
+//     userID = ''
+//   }
+// });
