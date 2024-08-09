@@ -30,22 +30,22 @@ export function instructorModal() {
 export function instructorChoice(balintButton, rossButton) {
     const balintButton = document.getElementById("balint-button");
     const rossButton = document.getElementById("ross-button");
-    
+
     balintButton.addEventListener("click", () => {
-        instructor = "balint"
+        userProfile.instructor = "balint"
         instructorModal.remove()
-        const docRef = doc(db, 'userProfiles', userID)
-        updateDoc(docRef, {
-          instructor: instructor,
-        })
+        // const docRef = doc(db, 'userProfiles', userID)
+        // updateDoc(docRef, {
+        //   instructor: instructor,
+        // })
       })
       rossButton.addEventListener("click", () => {
-        instructor = "rossomando"
+        userProfile.instructor = "rossomando"
         instructorModal.remove()
-        const docRef = doc(db, 'userProfiles', userID)
-        updateDoc(docRef, {
-          instructor: instructor,
-        })
+        // const docRef = doc(db, 'userProfiles', userID)
+        // updateDoc(docRef, {
+        //   instructor: instructor,
+        // })
       })
 }
 
