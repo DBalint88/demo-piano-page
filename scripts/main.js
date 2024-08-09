@@ -90,10 +90,8 @@ Check - has the uLevel 2 user submitted all the songs from Level 2?
 // GENERATE THE SONG CONTENT TO THE PAGE
 printSongsList();
 updateStatusLights();
-
-
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
-
+activateUI();
 let currentSongFbref = ''
 let currentSongTitle = ''
 let currentSongLevel = 0
