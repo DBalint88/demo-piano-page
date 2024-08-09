@@ -3,8 +3,9 @@ import { createSubmission } from './createSubmission.js';
 import { userProfile } from './userProfile.js';
 import { setWeek } from './setWeek.js';
 import { instructorModal, instructorChoice } from './instructorModal.js';
-import { printSongsList } from './printSongsList';
-import { updateStatusLights } from './updateStatusLights';
+import { printSongsList } from './printSongsList.js';
+import { updateStatusLights } from './updateStatusLights.js';
+import { activateUI } from './userInterface.js'
 
 // DOM references
 // TO-DO: Test how many of these can be 'const'
@@ -92,9 +93,7 @@ updateStatusLights();
 
 
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
-backButton.addEventListener("click", hideSongList);
-homeButton.addEventListener("click", goHome);
-submitButton.addEventListener("click", submitSong);
+
 let currentSongFbref = ''
 let currentSongTitle = ''
 let currentSongLevel = 0
