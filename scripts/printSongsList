@@ -1,4 +1,4 @@
-function printSongs () {
+export function printSongsList () {
     levelList = document.createElement('div')
     levelList.setAttribute('id', 'level-list')
     levelUl = document.createElement('ul')
@@ -55,7 +55,6 @@ function printSongs () {
   
         levelOl.appendChild(song)
         song.appendChild(statusIcon)
-        updateStatusLights()
         song.addEventListener('click', loadSong)
   
       }
