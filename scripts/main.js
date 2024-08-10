@@ -6,6 +6,7 @@ import { instructorModal, instructorChoice } from './instructorModal.js';
 import { printSongsList } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
 import { activateUI, callSongList, hideSongList, adjustListPosition, handleWindowSize } from './userInterface.js'
+import { displayState } from './displayState.js'
 
 // DOM references
 // TO-DO: Test how many of these can be 'const'
@@ -93,12 +94,7 @@ updateStatusLights();
 handleWindowSize()
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
 activateUI();
-let currentSongFbref = ''
-let currentSongTitle = ''
-let currentSongLevel = 0
-let currentSongValue = 0
-let currentSongSeq = 0
-let currentActiveLevel = ""
+
 
 
 
