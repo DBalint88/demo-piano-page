@@ -1,12 +1,12 @@
-export function printSongsList () {
-    levelList = document.createElement('div')
+export function printSongsList (navListWrapper) {
+    let levelList = document.createElement('div')
     levelList.setAttribute('id', 'level-list')
-    levelUl = document.createElement('ul')
+    let levelUl = document.createElement('ul')
     levelUl.setAttribute('id', 'level-ul')
     navListWrapper.appendChild(levelList)
     levelList.appendChild(levelUl)
   
-    for (let i=1; i <= songs.length; i++) {
+    for (let i=1; i <= songData.length; i++) {
   
       // Print the level list
       let levelButton = document.createElement('li')

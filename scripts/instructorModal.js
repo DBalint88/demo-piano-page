@@ -1,14 +1,10 @@
 // All Modal stuff:
 
 
-export function instructorModal() {
+export function instructorModal(balintButton, rossButton) {
 
     let instructorModal = document.createElement("div")
     let modalContent = document.createElement("div")
-    let balintButton = document.createElement("button")
-    balintButton.id = "balint-button"
-    let rossButton = document.createElement("button")
-    rossButton.id = "ross-button"
     let modalParagraph = document.createElement("p")
     let pageBody = document.getElementById("body")
 
@@ -28,8 +24,6 @@ export function instructorModal() {
 }
 
 export function instructorChoice(balintButton, rossButton) {
-    const balintButton = document.getElementById("balint-button");
-    const rossButton = document.getElementById("ross-button");
 
     balintButton.addEventListener("click", () => {
         userProfile.instructor = "balint"

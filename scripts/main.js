@@ -1,11 +1,11 @@
-import { songData } from './songData';
-import { createSubmission } from './createSubmission.js';
-import { userProfile } from './userProfile.js';
+import { songData } from './songData.js';
+import { createSubmission, determineSongValue, countCurrentSongAttempts, submitSong, postSubmission, retractSubmission } from './createSubmission.js';
+import { userProfile, updateUserLevel } from './userProfile.js';
 import { setWeek } from './setWeek.js';
 import { instructorModal, instructorChoice } from './instructorModal.js';
 import { printSongsList } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
-import { activateUI, callSongList, hideSongList, adjustListPosition, handleWindowSize } from './userInterface.js'
+import { activateUI, callSongList, hideSongList, adjustListPosition, handleWindowSize, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData } from './userInterface.js'
 import { displayState } from './displayState.js'
 
 // DOM references
@@ -23,6 +23,13 @@ let submitButton = document.getElementById("submit-button");
 const navListWrapper = document.getElementById("nav-list-wrapper");
 let levelList;
 let levelUl;
+const loginButton = document.getElementById("googleSignIn")
+const logoutButton = document.getElementById("signoutButton")
+const loadingGif = document.getElementById("loading-gif")
+let splashGreeting = document.getElementById("splash-greeting")
+let balintButton = document.createElement("button")
+let rossButton = document.createElement("button")
+
 
 // Set the week number (All submissions are due Friday of each week.)
 const currentWeek = setWeek();
@@ -46,8 +53,8 @@ const currentWeek = setWeek();
 
 // Confirm the instructor, initiate the modal if necessary.
 if (userProfile.instructor != "balint" && userProfile.instructor != "rossomando") {
-    instructorModal();
-    instructorChoice();
+    instructorModal(balintButton, rossButton);
+    instructorChoice(balintButton, rossButton);
 }
 
 /*
@@ -86,214 +93,12 @@ Check - has the uLevel 2 user submitted all the songs from Level 2?
 //   printSongs()
 // }
 
-
-
 // GENERATE THE SONG CONTENT TO THE PAGE
-printSongsList();
+printSongsList(navListWrapper);
 updateStatusLights();
 handleWindowSize()
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
 activateUI();
-
-
-
-
-// Submissions need to be named userId + songID + attempts
-
-async function countCurrentSongAttempts() {
-  // Query the database for all user Submissions
-  let userSubmissions = []
-  const countQuery = query(subsRef, where("userID", "==", userID))
-  await getDocs(countQuery)
-    .then((snapshot) => {
-      snapshot.docs.forEach((sub) => {
-        userSubmissions.push(sub.id)
-      })
-    })
-  console.log('countCurrentSongAttempts 336 userSubmissions: ', userSubmissions)
-  let i = 1
-  while (true) {
-    console.log('countCurrentSongAttempts while loop.  Eval: ' + userID + currentSongFbref + '(' + i + ')')
-    if (userSubmissions.includes(userID + currentSongFbref + '(' + i + ')')) {
-      i++
-    } else {
-      console.log('countCurrentSongAttempts line343 returns: ', (i-1))
-      return (i-1);
-    }
-  }
-}
-
-
-
-//  DETERMINE POINT VALUE OF CURRENT SONG TOWARDS WEEKLY QUOTA
-function determineSongValue(x) {
-  switch (x) {
-    case 1:
-      return 15 * handicap
-    case 2:
-      return 20 * handicap
-    case 3:
-      return 30 * handicap
-    default:
-      return 60
-  }
-}
-
-function goHome() {
-  iframe.style.width = '0';
-  iframe.style.height = '0';
-  videoLink.href = ''
-  pdfLink.href = ''
-  splash.style.display = "block";
-  currentSongFbref = ''
-  currentSongTitle = ''
-  currentSongLevel = 0
-  currentSongValue = 0
-  currentSongAttempts = 0
-  updateButtons();
-}
-
-
-
-
-// CONTROL APPEARANCE OF YT, PDF, HOME, & SUBMIT BUTTONS
-function updateButtons() {
-  if (currentSongFbref == '') {
-    videoIcon.style.opacity = ".2"
-    videoLink.style.pointerEvents="none"
-    pdfIcon.style.opacity = ".2"
-    pdfLink.style.pointerEvents="none"
-    submitButton.style.opacity = ".2"
-    submitButton.style.pointerEvents="none"
-  } else {
-    videoIcon.style.opacity = "1"
-    videoLink.style.cursor = "pointer"
-    videoLink.style.pointerEvents = "auto"
-    pdfIcon.style.opacity = "1"
-    pdfLink.style.cursor = "pointer"
-    pdfLink.style.pointerEvents = "auto"
-    submitButton.style.pointerEvents="auto"
-    if (completedSongs.includes(currentSongFbref)) {
-      submitButton.src = "images/upload-icon.png"
-      submitButton.style.opacity = ".2"
-      submitButton.style.cursor = "default"
-    } else if (pendingSongs.includes(currentSongFbref)) {
-      submitButton.src = "images/undo-icon.png"
-      submitButton.style.opacity = "1"
-      submitButton.style.cursor = "pointer"
-    } else {
-      submitButton.src = "images/upload-icon.png"
-      submitButton.style.opacity = "1"
-      submitButton.style.cursor = "pointer"
-    }
-  }
-}
-
-
-
-// UPDATE THE QUOTA DISPLAY
-async function updateQuotaDisplay() {
-  let currentWeekAttempted = 0
-  let currentWeekEarned = 0
-  let userCurrentWeekSubs = []
-  const quotaQuery = query(subsRef, where("userID", "==", userID), where("week", "==", currentWeek))
-  await getDocs(quotaQuery)
-    .then((snapshot) => {
-      snapshot.docs.forEach((sub) => {
-        userCurrentWeekSubs.push({ ...sub.data(), id: sub.id })
-      })
-    })
-  for (let i = 0; i < userCurrentWeekSubs.length; i++) {
-    const sub = userCurrentWeekSubs[i];
-    if (sub.resolved == false) {
-      currentWeekAttempted += sub.pointValue
-    } else if (sub.result == "pass") {
-      currentWeekEarned += sub.pointValue
-    }
-  }
-  
-  
-  document.getElementById("points-attempted").innerText = currentWeekAttempted;
-  document.getElementById("points-earned").innerText = currentWeekEarned;
-}
-
-
-
-
-
-
-// HANDLE SONG SUBMISSION
-async function submitSong(e) {
-  if ((instructor != "balint") && (instructor != "rossomando")) {
-    await confirmInstructor()
-  }
-  if (pendingSongs.includes(currentSongFbref)) {
-    if (confirm("Are you sure you want to unsubmit " + currentSongTitle + "?")) {
-      const docRef = doc(db, 'userProfiles', userID)
-      pendingSongs.splice(pendingSongs.indexOf(currentSongFbref), 1)
-      updateDoc(docRef, {
-      pendingSongs: pendingSongs,
-      })
-      retractSubmission()
-    }
-
-  } else if (failedSongs.includes(currentSongFbref)) {
-    if (confirm("Are you sure you want to resubmit " + currentSongTitle + "?")) {
-      const docRef = doc(db, 'userProfiles', userID)
-      pendingSongs.push(currentSongFbref)
-      updateDoc(docRef, {
-      pendingSongs: pendingSongs,
-      })
-      createSubmission()
-      if (currentSongLevel == userLevel) {
-        updateSongListLive()
-      }
-    }
-
-  } else if (!completedSongs.includes(currentSongFbref)) {
-    if (confirm("Are you sure you want to submit " + currentSongTitle + "?")) {
-      pendingSongs.push(currentSongFbref)
-      const docRef = doc(db, 'userProfiles', userID)
-      updateDoc(docRef, {
-      pendingSongs: pendingSongs,
-      })
-      createSubmission()
-      if (currentSongLevel == userLevel) {
-        updateSongListLive()
-      }
-    }
-  }
-}
-
-async function createSubmission() {
-  console.log('createSubmission 484: Trying to create sub doc: ', userID+currentSongFbref+'('+(currentSongAttempts+1)+')')
-  await setDoc(doc(db, "submissions", userID+currentSongFbref+'('+(currentSongAttempts+1)+')'), {
-      resolved: false,
-      result: '',
-      timeStamp: serverTimestamp(),
-      week: currentWeek,
-      userID: userID,
-      lastName: userLastName,
-      firstName: username,
-      songfbRef: currentSongFbref,
-      songLevel: currentSongLevel,
-      songSeq: currentSongSeq,
-      songTitle: currentSongTitle,
-      pointValue: currentSongValue,
-      instructor: instructor
-    })
-    currentSongAttempts = await countCurrentSongAttempts()
-    console.log('createSubmission says: currentSongAttempts = ', currentSongAttempts)
-    console.log('submission sent successfully: ', userID+currentSongFbref+'('+(currentSongAttempts)+')')
-}
-
-async function retractSubmission() {
-  console.log('trying to delete: ', userID+currentSongFbref+'(' + currentSongAttempts + ')')
-  await deleteDoc(doc(db, "submissions", userID+currentSongFbref+'(' + currentSongAttempts + ')'))
-  currentSongAttempts = await countCurrentSongAttempts()
-  console.log('retractSubmission says: currentSongAttempts = ', currentSongAttempts)
-  console.log('submission deleted successfully.')
-}
 
 // UPDATE USER'S LEVEL
 // If a user's completedSongs array includes ALL of the songs with level == the user's level
@@ -302,73 +107,15 @@ async function retractSubmission() {
 // If a user's completedSongs array U pendingSongs array includes ALL of the songs with level == user's level
 // They should be given access to the next level of songs.
 
-async function updateUserLevel() {
-
-  let allCurrentLevelSongs = []
-  songs[userLevel-1].forEach((element) => allCurrentLevelSongs.push(element.id))
-
-  let checker = (arr, target) => target.every(v => arr.includes(v));
-
-  if (checker(completedSongs, allCurrentLevelSongs)) {
-    userLevel++
-    const docRef = doc(db, 'userProfiles', userID)
-    let docSnap = await getDoc(docRef);
-    updateDoc(docRef, {
-      level: userLevel
-    })
-    clearData()
-    getUserData(docSnap)
-    getSongs()
-  }
-}
-
-async function updateSongListLive() {
-  let allCurrentLevelSongs = []
-  songs[userLevel-1].forEach((element) => allCurrentLevelSongs.push(element.id))
-  let allCurrentLevelSubmissions = completedSongs.concat(pendingSongs)
-
-  let checker = (arr, target) => target.every(v => arr.includes(v));
-
-  if (checker(allCurrentLevelSubmissions, allCurrentLevelSongs)) {
-    let temp = userLevel + 1
-    const docRef = doc(db, 'userProfiles', userID)
-    let docSnap = await getDoc(docRef);
-    clearData()
-    getUserData(docSnap)
-    getSongs(temp)
-  } 
-}
-
-
-// CLEAR DATA ON LOG OUT, OR TO RESET PAGE ON LEVEL CHANGES
-function clearData() {
-  backButton.classList.remove("back-button-active")
-  while (navListWrapper.firstChild) {
-    navListWrapper.removeChild(navListWrapper.firstChild)
-  }
-  pendingSongs = []
-  completedSongs = []
-  failedSongs = []
-  userLevel = null;
-  songs = []
-}
-
-
-
 // LOGGIN IN & LOGGIN OUT
-const loginButton = document.getElementById("googleSignIn")
-const logoutButton = document.getElementById("signoutButton")
-const loadingGif = document.getElementById("loading-gif")
-let splashGreeting = document.getElementById("splash-greeting")
+
 
 loginButton.addEventListener('click', () => {
-  signInWithPopup(auth, provider)
   loginButton.style.display = 'none'
   loadingGif.style.display = 'block'
   })
 logoutButton.addEventListener('click', () => {
   splashGreeting.innerText = "Please log in with your Hamden.org account."
-  signOut(auth)
 })
 
 // onAuthStateChanged(auth, async (user) => {

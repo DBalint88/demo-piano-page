@@ -14,7 +14,7 @@
     
     #googleSignIn {
       margin: auto;
-      display: none;
+      display: flex;
       height: 3rem;
       width: 12rem;
       background-color: black;
