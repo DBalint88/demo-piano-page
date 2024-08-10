@@ -5,16 +5,18 @@ export function activateUI(backButton, homeButton, submitButton) {
 }
 
 
-export  function callSongList(e) {
-    currentActiveLevel = this.id
-    let currentActiveSongList = songList[currentActiveLevel-1]
+export  function callSongList(e, songList, currentActiveLevel, levelList, backButton) {
+    console.log(currentActiveLevel);
+    currentActiveLevel = e;
+    console.log(currentActiveLevel);
+    let currentActiveSongList = document.getElementById("level-" + e);
     levelList.classList.add("inactive-level-list");
     currentActiveSongList.classList.add('song-list-loading')
     setTimeout(function(){
       currentActiveSongList.classList.add("active-song-list")
       currentActiveSongList.classList.remove('song-list-loading')
       backButton.classList.add("back-button-active") 
-      adjustListPosition()
+      // adjustListPosition()
     }, 1) 
 }
 

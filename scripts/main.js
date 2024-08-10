@@ -5,7 +5,7 @@ import { setWeek } from './setWeek.js';
 import { instructorModal, instructorChoice } from './instructorModal.js';
 import { getSongs, printSongsList } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
-import { activateUI, callSongList, hideSongList, adjustListPosition, handleWindowSize, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData } from './userInterface.js'
+import { activateUI, callSongList, hideSongList, adjustListPosition, handleWindowSize, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData, loadSong } from './userInterface.js'
 import { displayState } from './displayState.js'
 
 // DOM references
@@ -74,8 +74,8 @@ Check - has the uLevel 2 user submitted all the songs from Level 2?
 
 // GENERATE THE SONG CONTENT TO THE PAGE
 let userSongs = getSongs(userProfile, songData);
-printSongsList(navListWrapper, userSongs, callSongList, determineSongValue);
-updateStatusLights();
+printSongsList(navListWrapper, userSongs, callSongList, determineSongValue, userProfile.handicap, loadSong, displayState.currentActiveLevel, backButton);
+// updateStatusLights();
 // handleWindowSize()
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
 // activateUI();

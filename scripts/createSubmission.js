@@ -17,7 +17,7 @@ export function createSubmission() {
 }
 
 //  DETERMINE POINT VALUE OF CURRENT SONG TOWARDS WEEKLY QUOTA
-export function determineSongValue(x) {
+export function determineSongValue(x, handicap) {
     switch (x) {
       case 7:
         return 15 * handicap

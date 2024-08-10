@@ -2,17 +2,18 @@
 
 export function getSongs(userProfile, songData) {
   let userSongs = [];
-  for (let i=0; i <= userProfile.level; i++) {
+  for (let i=0; i < userProfile.level; i++) {
     let levelList = [];
       
     for (let song of songData) {
-      if (song.level == i) {
+      if (song.level == (i+1)) {
         levelList.push(song);
       }
     }
     userSongs.push(levelList)
     
   }
+  console.log(userSongs)
   return userSongs;
 }
 
@@ -36,7 +37,7 @@ export function getSongs(userProfile, songData) {
 // }
 
 
-export function printSongsList (navListWrapper, userSongs, callSongList, determineSongValue) {
+export function printSongsList (navListWrapper, userSongs, callSongList, determineSongValue, handicap, loadSong, currentActiveLevel, backButton) {
     let levelList = document.createElement('div')
     levelList.setAttribute('id', 'level-list')
     let levelUl = document.createElement('ul')
@@ -53,7 +54,10 @@ export function printSongsList (navListWrapper, userSongs, callSongList, determi
       levelButton.setAttribute("id", i)
       levelButton.textContent = 'Level ' + i
       levelUl.appendChild(levelButton)
-      levelButton.addEventListener('click', callSongList)
+      levelButton.addEventListener('click', function(event) {
+        const e = event.target.id;
+        callSongList(e, userSongs, currentActiveLevel, levelList, backButton)
+      });
   
       let songsContainer = document.createElement("div")
       songsContainer.classList.add('song-list')
@@ -63,7 +67,7 @@ export function printSongsList (navListWrapper, userSongs, callSongList, determi
       levelHeader.textContent = 'Level ' + i
   
       let levelValueHeader = document.createElement('h4')
-      levelValueHeader.textContent = '(' + determineSongValue(i) + ' points each)'
+      levelValueHeader.textContent = '(' + determineSongValue(i, handicap) + ' points each)'
   
       let levelOl = document.createElement("ol")
   
@@ -74,7 +78,9 @@ export function printSongsList (navListWrapper, userSongs, callSongList, determi
   
   
       // Print the song buttons
-      for(let j=0; j<userSongs[i].length; j++) {
+      
+      for(let j=0; j<userSongs[i-1].length; j++) {
+        console.log(userSongs[i-1][j])
         let song = document.createElement("li");
         song.classList.add("song-button")
         let songSrc = userSongs[i-1][j]
