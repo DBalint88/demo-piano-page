@@ -3,7 +3,7 @@ import { createSubmission, determineSongValue, countCurrentSongAttempts, submitS
 import { userProfile, updateUserLevel } from './userProfile.js';
 import { setWeek } from './setWeek.js';
 import { instructorModal, instructorChoice } from './instructorModal.js';
-import { printSongsList } from './printSongsList.js';
+import { getSongs, printSongsList } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
 import { activateUI, callSongList, hideSongList, adjustListPosition, handleWindowSize, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData } from './userInterface.js'
 import { displayState } from './displayState.js'
@@ -70,35 +70,15 @@ Check - has the uLevel 2 user submitted all the songs from Level 2?
 
 */
 
-// FETCH SONGS APPROPRIATE TO THE USER'S LEVEL
-// async function getSongs(x = userLevel) {
-//   console.log("getSongs says: x = ", x)
-//   for (let i=1; i <= x; i++) {
-//     window.window['level' + i] = []
-//     let q = query(songsRef, where("level", "==", i), orderBy("sequence"))
-//     await getDocs(q)
-//     .then((snapshot) => {
-//       snapshot.docs.forEach((doc) => {
-//         window['level' + i].push({ ...doc.data(), id: doc.id })
-//       })
-//       songs.push(window['level' + i])
-//       console.log("getSongs says: ", window['level' + i])
-//     })
-//   }
-//   updateUserLevel()
-//   if (x == userLevel) {
-//     updateSongListLive()
-//     printSongs
-//   }
-//   printSongs()
-// }
+
 
 // GENERATE THE SONG CONTENT TO THE PAGE
-printSongsList(navListWrapper);
+let userSongs = getSongs(userProfile, songData);
+printSongsList(navListWrapper, userSongs, callSongList, determineSongValue);
 updateStatusLights();
-handleWindowSize()
+// handleWindowSize()
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
-activateUI();
+// activateUI();
 
 // UPDATE USER'S LEVEL
 // If a user's completedSongs array includes ALL of the songs with level == the user's level

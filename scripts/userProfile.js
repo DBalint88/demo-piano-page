@@ -2,9 +2,9 @@ export let userProfile = {
     firstName: "Cameron",
     lastName: "Doe",
     nick: "Cam",
-    instructor: "",
+    instructor: "balint",
     handicap: 1,
-    level: 8,
+    level: 7,
     pendingSongs: [],
     failedSongs: [],
     completedSongs: []

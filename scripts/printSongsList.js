@@ -1,12 +1,51 @@
-export function printSongsList (navListWrapper) {
+// FETCH SONGS APPROPRIATE TO THE USER'S LEVEL
+
+export function getSongs(userProfile, songData) {
+  let userSongs = [];
+  for (let i=0; i <= userProfile.level; i++) {
+    let levelList = [];
+      
+    for (let song of songData) {
+      if (song.level == i) {
+        levelList.push(song);
+      }
+    }
+    userSongs.push(levelList)
+    
+  }
+  return userSongs;
+}
+
+  //   window.window['level' + i] = []
+  //   let q = query(songsRef, where("level", "==", i), orderBy("sequence"))
+  //   await getDocs(q)
+  //   .then((snapshot) => {
+  //     snapshot.docs.forEach((doc) => {
+  //       window['level' + i].push({ ...doc.data(), id: doc.id })
+  //     })
+  //     songs.push(window['level' + i])
+  //     console.log("getSongs says: ", window['level' + i])
+  //   })
+  // }
+//   updateUserLevel()
+//   if (x == userLevel) {
+//     updateSongListLive()
+//     printSongs
+//   }
+//   printSongs()
+// }
+
+
+export function printSongsList (navListWrapper, userSongs, callSongList, determineSongValue) {
     let levelList = document.createElement('div')
     levelList.setAttribute('id', 'level-list')
     let levelUl = document.createElement('ul')
     levelUl.setAttribute('id', 'level-ul')
     navListWrapper.appendChild(levelList)
     levelList.appendChild(levelUl)
+    console.log(userSongs);
   
-    for (let i=1; i <= songData.length; i++) {
+    for (let i=7; i <= userSongs.length; i++) {
   
       // Print the level list
       let levelButton = document.createElement('li')
@@ -35,10 +74,10 @@ export function printSongsList (navListWrapper) {
   
   
       // Print the song buttons
-      for(let j=0; j<window['level' + i].length; j++) {
+      for(let j=0; j<userSongs[i].length; j++) {
         let song = document.createElement("li");
         song.classList.add("song-button")
-        let songSrc = songData[i-1][j]
+        let songSrc = userSongs[i-1][j]
         song.setAttribute("data-level", i)
         song.setAttribute("data-seq", (j+1))
         song.setAttribute("data-pdf", songSrc.image)
