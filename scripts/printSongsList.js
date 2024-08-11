@@ -13,7 +13,6 @@ export function getSongs(userProfile, songData) {
     userSongs.push(levelList)
     
   }
-  console.log(userSongs)
   return userSongs;
 }
 
@@ -44,7 +43,6 @@ export function printSongsList (navListWrapper, userSongs, callSongList, determi
     levelUl.setAttribute('id', 'level-ul')
     navListWrapper.appendChild(levelList)
     levelList.appendChild(levelUl)
-    console.log(userSongs);
   
     for (let i=7; i <= userSongs.length; i++) {
   
@@ -80,7 +78,6 @@ export function printSongsList (navListWrapper, userSongs, callSongList, determi
       // Print the song buttons
       
       for(let j=0; j<userSongs[i-1].length; j++) {
-        console.log(userSongs[i-1][j])
         let song = document.createElement("li");
         song.classList.add("song-button")
         let songSrc = userSongs[i-1][j]
