@@ -1,16 +1,25 @@
 export function activateUI(comps, displayState) {
-    comps.loginButton.addEventListener('click', () => {
-      loginButton.style.display = 'none'
-      loadingGif.style.display = 'block'
-      })
+      console.log("activate UI fired")
+      comps.loginButton.style.display = 'none'
+      comps.loadingGif.style.display = 'block'
+      setTimeout(function(){
+        comps.loadingGif.style.display = 'none';
+        comps.logoutButton.style.display = 'flex'
+        // adjustListPosition()
+      }, 300) 
     comps.logoutButton.addEventListener('click', () => {
-      splashGreeting.innerText = "Please log in with your Hamden.org account."
+      comps.splashGreeting.innerText = "Please log in with your Hamden.org account."
     })
     comps.backButton.addEventListener("click", function() {
       hideSongList(displayState, comps)
       });
     comps.homeButton.addEventListener("click", goHome);
     // submitButton.addEventListener("click", submitSong);
+    comps.logoutButton.addEventListener("click", () => {
+      clearData(comps)
+      comps.logoutButton.style.display = 'none'
+      comps.loginButton.style.display = 'flex'
+    });
 }
 
 
@@ -188,14 +197,10 @@ export async function updateQuotaDisplay() {
   }
 
   // CLEAR DATA ON LOG OUT, OR TO RESET PAGE ON LEVEL CHANGES
-export function clearData() {
-    backButton.classList.remove("back-button-active")
-    while (navListWrapper.firstChild) {
-      navListWrapper.removeChild(navListWrapper.firstChild)
+export function clearData(comps) {
+  console.log("clearData fired")
+    comps.backButton.classList.remove("back-button-active")
+    while (comps.navListWrapper.firstChild) {
+      comps.navListWrapper.removeChild(comps.navListWrapper.firstChild)
     }
-    pendingSongs = []
-    completedSongs = []
-    failedSongs = []
-    userLevel = null;
-    songs = []
   }

@@ -9,59 +9,23 @@ import { updateStatusLights } from './updateStatusLights.js';
 import { activateUI, callSongList, hideSongList, adjustListPosition, handleWindowSize, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData, loadSong } from './userInterface.js'
 import { displayState } from './displayState.js'
 
-// DOM references
-// TO-DO: Test how many of these can be 'const'
-
-
-
 // Set the week number (All submissions are due Friday of each week.)
 const currentWeek = setWeek();
 
-// Fetch user data from FireStore -> LOCAL  <<NOT NECESSARY FOR DEMO>>
-
-// function getUserData(docSnap) {
-//   userLevel = docSnap.get("level")
-//   pendingSongs = docSnap.get("pendingSongs")
-//   completedSongs = docSnap.get("completedSongs")
-//   failedSongs = docSnap.get("failedSongs")
-//   handicap = docSnap.get("handicap")
-//   userLvl9 = docSnap.get("userLvl9")
-//   instructor = docSnap.get("instructor")
-//   console.log("instructor: " + instructor)
-//   if (instructor != "balint" && instructor != "rossomando") {
-//     console.log("ah jeez idk who the instructor is.")
-//     confirmInstructor()
-//   }
-// }
-
-// Confirm the instructor, initiate the modal if necessary.
-if (userProfile.instructor != "balint" && userProfile.instructor != "rossomando") {
-    instructorModal(balintButton, rossButton);
-    instructorChoice(balintButton, rossButton);
-}
-
-/*
-What I want is ...
-
-Fetch the songs for the user's level. So if uLevel is 2, fetch sLevels 1 and 2.
-Check - has the uLevel 2 user submitted all the songs from Level 2?
-        If so, clear the data and re-run the fetch function at level 3 (without actually uLevel++).  
-        Then printSongs().
-        If not, just printSongs.
-        It seems like maybe the if condition from updateSongListLive() needs to be brought up to the main
-        getSongs function.
-
-*/
-
-
-
+comps.loginButton.addEventListener("click", function() {
+  activateUI(comps, displayState);
+  setTimeout(() => {
+    let userSongs = getSongs(userProfile, songData);
+    printSongsList(comps, userSongs, callSongList, determineSongValue, userProfile.handicap,  loadSong, displayState);
+  }, 300);
+  
+})
 // GENERATE THE SONG CONTENT TO THE PAGE
-let userSongs = getSongs(userProfile, songData);
-printSongsList(comps, userSongs, callSongList, determineSongValue, userProfile.handicap, loadSong, displayState);
+
 // updateStatusLights();
 // handleWindowSize()
+
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
-activateUI(comps, displayState);
 
 // UPDATE USER'S LEVEL
 // If a user's completedSongs array includes ALL of the songs with level == the user's level
@@ -153,9 +117,6 @@ activateUI(comps, displayState);
     
 //   } else {
 //     console.log('no user logged in')
-//     loginButton.style.display = 'flex'
-//     logoutButton.style.display = 'none'
-//     clearData()
-//     userID = ''
+//     
 //   }
 // });
