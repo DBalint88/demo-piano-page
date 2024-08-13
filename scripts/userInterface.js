@@ -1,14 +1,14 @@
-export function activateUI(comps, displayState) {
-      console.log("activate UI fired")
-      comps.loginButton.style.display = 'none'
-      comps.loadingGif.style.display = 'block'
-      setTimeout(function(){
-        comps.loadingGif.style.display = 'none';
-        comps.logoutButton.style.display = 'flex'
-        // adjustListPosition()
-      }, 300) 
+export function activateUI(comps, displayState, userProfile) {
+    comps.loginButton.addEventListener('click', () => {
+      logIn(comps, userProfile)
+    })
     comps.logoutButton.addEventListener('click', () => {
-      comps.splashGreeting.innerText = "Please log in with your Hamden.org account."
+      comps.splashGreeting.innerText = "Please log in to your fake demo account:"
+
+      comps.logoutButton.style.display = 'none'
+      comps.loginButton.style.display = 'flex'
+
+      clearData(comps)
     })
     comps.backButton.addEventListener("click", function() {
       hideSongList(displayState, comps)
@@ -16,12 +16,24 @@ export function activateUI(comps, displayState) {
     comps.homeButton.addEventListener("click", goHome);
     // submitButton.addEventListener("click", submitSong);
     comps.logoutButton.addEventListener("click", () => {
-      clearData(comps)
-      comps.logoutButton.style.display = 'none'
-      comps.loginButton.style.display = 'flex'
     });
 }
 
+export function logIn(comps, userProfile) {
+  console.log("logIn fired")
+    comps.loginButton.style.display = 'none'
+    comps.loadingGif.style.display = 'block'
+    setTimeout(function() {
+      comps.loadingGif.style.display = 'none';
+      comps.logoutButton.style.display = 'flex'
+      // adjustListPosition()
+    }, 400)   
+
+    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    const d = new Date();
+      let day = weekday[d.getDay()];
+    comps.splashGreeting.innerText = (`Happy ${day}, ${userProfile.nick}! Please click a Level on the left to get started.`)
+}
 
 export  function callSongList(e, displayState, levelList, comps) {
     displayState.currentActiveLevel = e;

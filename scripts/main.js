@@ -12,12 +12,13 @@ import { displayState } from './displayState.js'
 // Set the week number (All submissions are due Friday of each week.)
 const currentWeek = setWeek();
 
+activateUI(comps, displayState, userProfile);
+
 comps.loginButton.addEventListener("click", function() {
-  activateUI(comps, displayState);
   setTimeout(() => {
     let userSongs = getSongs(userProfile, songData);
     printSongsList(comps, userSongs, callSongList, determineSongValue, userProfile.handicap,  loadSong, displayState);
-  }, 300);
+  }, 400);
   
 })
 // GENERATE THE SONG CONTENT TO THE PAGE
@@ -82,24 +83,9 @@ comps.loginButton.addEventListener("click", function() {
 //         updateQuotaDisplay()
 //       })
       
-//       username = (user.displayName).split(" ")[0];  
-//       let nick = await docSnap.get("nick")
-//       if (!nick == "") {
-//         username = nick
-//       }
-//       userLastName = (user.displayName).split(" ")[1]
-
+//       
       
 
-        
-//       const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-//       const d = new Date();
-//        let day = weekday[d.getDay()];
-//       splashGreeting.innerText = (`Happy ${day}, ${username}! Please click a Level on the left to get started.`)
-      
-
-//       loadingGif.style.display = 'none'
-//       logoutButton.style.display = 'block'
 
 //       getUserData(docSnap)
 //       const quotaMax = document.getElementsByClassName("quota-max");
