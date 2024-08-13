@@ -13,7 +13,9 @@ export function activateUI(comps, displayState, userProfile) {
     comps.backButton.addEventListener("click", function() {
       hideSongList(displayState, comps)
       });
-    comps.homeButton.addEventListener("click", goHome);
+    comps.homeButton.addEventListener("click", function() {
+      goHome(comps, displayState, userProfile)
+    });
     // submitButton.addEventListener("click", submitSong);
     comps.logoutButton.addEventListener("click", () => {
     });
@@ -65,7 +67,7 @@ export function hideSongList(displayState, comps) {
     displayState.currentActiveLevel = ""
 }
   
-export async function loadSong(e, displayState, comps) {
+export function loadSong(e, displayState, comps, userProfile) {
     comps.splash.style.display = "none";
     comps.iframe.style.width = "100%";
     comps.iframe.style.height = "100%";
@@ -84,7 +86,7 @@ export async function loadSong(e, displayState, comps) {
     // // currentSongValue = determineSongValue(currentSongLevel)
     // // currentSongAttempts = await countCurrentSongAttempts()
     // console.log('loadSong says: currentSongAttempts = ', currentSongAttempts)
-    // updateButtons(); 
+    updateButtons(comps, displayState, userProfile); 
 }
   
 export function adjustListPosition() {
@@ -118,49 +120,50 @@ export function handleWindowSize(window) {
     window.addEventListener('resize', adjustListPosition);
 }
 
-export function goHome() {
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    videoLink.href = ''
-    pdfLink.href = ''
-    splash.style.display = "block";
-    currentSongFbref = ''
-    currentSongTitle = ''
-    currentSongLevel = 0
-    currentSongValue = 0
-    currentSongAttempts = 0
-    updateButtons();
+export function goHome(comps, displayState, userProfile) {
+    comps.iframe.style.width = '0';
+    comps.iframe.style.height = '0';
+    comps.videoLink.href = ''
+    comps.pdfLink.href = ''
+    comps.splash.style.display = "block";
+    displayState.currentSongFbref = ''
+    displayState.currentSongTitle = ''
+    displayState.currentSongLevel = 0
+    displayState.currentSongValue = 0
+    displayState.currentSongAttempts = 0
+    updateButtons(comps, displayState, userProfile);
 }
 
 // CONTROL APPEARANCE OF YT, PDF, HOME, & SUBMIT BUTTONS
-export function updateButtons() {
-  if (currentSongFbref == '') {
-    videoIcon.style.opacity = ".2"
-    videoLink.style.pointerEvents="none"
-    pdfIcon.style.opacity = ".2"
-    pdfLink.style.pointerEvents="none"
-    submitButton.style.opacity = ".2"
-    submitButton.style.pointerEvents="none"
+export function updateButtons(comps, displayState, userProfile) {
+  console.log("updateButtons fired");
+  if (displayState.currentSongFbref == '') {
+    comps.videoIcon.style.opacity = ".2"
+    comps.videoLink.style.pointerEvents="none"
+    comps.pdfIcon.style.opacity = ".2"
+    comps.pdfLink.style.pointerEvents="none"
+    comps.submitButton.style.opacity = ".2"
+    comps.submitButton.style.pointerEvents="none"
   } else {
-    videoIcon.style.opacity = "1"
-    videoLink.style.cursor = "pointer"
-    videoLink.style.pointerEvents = "auto"
-    pdfIcon.style.opacity = "1"
-    pdfLink.style.cursor = "pointer"
-    pdfLink.style.pointerEvents = "auto"
-    submitButton.style.pointerEvents="auto"
-    if (completedSongs.includes(currentSongFbref)) {
-      submitButton.src = "images/upload-icon.png"
-      submitButton.style.opacity = ".2"
-      submitButton.style.cursor = "default"
-    } else if (pendingSongs.includes(currentSongFbref)) {
-      submitButton.src = "images/undo-icon.png"
-      submitButton.style.opacity = "1"
-      submitButton.style.cursor = "pointer"
+    comps.videoIcon.style.opacity = "1"
+    comps.videoLink.style.cursor = "pointer"
+    comps.videoLink.style.pointerEvents = "auto"
+    comps.pdfIcon.style.opacity = "1"
+    comps.pdfLink.style.cursor = "pointer"
+    comps.pdfLink.style.pointerEvents = "auto"
+    comps.submitButton.style.pointerEvents="auto"
+    if (userProfile.completedSongs.includes(displayState.currentSongFbref)) {
+      comps.submitButton.src = "images/upload-icon.png"
+      comps.submitButton.style.opacity = ".2"
+      comps.submitButton.style.cursor = "default"
+    } else if (userProfile.pendingSongs.includes(displayState.currentSongFbref)) {
+      comps.submitButton.src = "images/undo-icon.png"
+      comps.submitButton.style.opacity = "1"
+      comps.submitButton.style.cursor = "pointer"
     } else {
-      submitButton.src = "images/upload-icon.png"
-      submitButton.style.opacity = "1"
-      submitButton.style.cursor = "pointer"
+      comps.submitButton.src = "images/upload-icon.png"
+      comps.submitButton.style.opacity = "1"
+      comps.submitButton.style.cursor = "pointer"
     }
   }
 }

@@ -36,7 +36,7 @@ export function getSongs(userProfile, songData) {
 // }
 
 
-export function printSongsList (comps, userSongs, callSongList, determineSongValue, handicap, loadSong, displayState) {
+export function printSongsList (comps, userSongs, callSongList, determineSongValue, handicap, loadSong, displayState, userProfile) {
     let levelList = document.createElement('div')
     levelList.setAttribute('id', 'level-list')
     let levelUl = document.createElement('ul')
@@ -99,7 +99,7 @@ export function printSongsList (comps, userSongs, callSongList, determineSongVal
         song.appendChild(statusIcon)
         song.addEventListener('click', function(event) {
           const e = event.target;
-          loadSong(e, displayState, comps);
+          loadSong(e, displayState, comps, userProfile);
         });
   
       }

@@ -17,7 +17,7 @@ activateUI(comps, displayState, userProfile);
 comps.loginButton.addEventListener("click", function() {
   setTimeout(() => {
     let userSongs = getSongs(userProfile, songData);
-    printSongsList(comps, userSongs, callSongList, determineSongValue, userProfile.handicap,  loadSong, displayState);
+    printSongsList(comps, userSongs, callSongList, determineSongValue, userProfile.handicap,  loadSong, displayState, userProfile);
   }, 400);
   
 })
