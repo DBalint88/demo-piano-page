@@ -36,7 +36,7 @@ export function getSongs(userProfile, songData) {
 // }
 
 
-export function printSongsList (navListWrapper, userSongs, callSongList, determineSongValue, handicap, loadSong, currentActiveLevel, backButton) {
+export function printSongsList (navListWrapper, userSongs, callSongList, determineSongValue, handicap, loadSong, displayState, backButton) {
     let levelList = document.createElement('div')
     levelList.setAttribute('id', 'level-list')
     let levelUl = document.createElement('ul')
@@ -54,7 +54,7 @@ export function printSongsList (navListWrapper, userSongs, callSongList, determi
       levelUl.appendChild(levelButton)
       levelButton.addEventListener('click', function(event) {
         const e = event.target.id;
-        callSongList(e, userSongs, currentActiveLevel, levelList, backButton)
+        callSongList(e, displayState, levelList, backButton)
       });
   
       let songsContainer = document.createElement("div")

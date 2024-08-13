@@ -1,14 +1,14 @@
-export function activateUI(backButton, homeButton, submitButton) {
-    backButton.addEventListener("click", hideSongList);
+export function activateUI(backButton, homeButton, submitButton, displayState) {
+    backButton.addEventListener("click", function() {
+      hideSongList(displayState)
+      });
     homeButton.addEventListener("click", goHome);
-    submitButton.addEventListener("click", submitSong);
+    // submitButton.addEventListener("click", submitSong);
 }
 
 
-export  function callSongList(e, songList, currentActiveLevel, levelList, backButton) {
-    console.log(currentActiveLevel);
-    currentActiveLevel = e;
-    console.log(currentActiveLevel);
+export  function callSongList(e,displayState, levelList, backButton) {
+    displayState.currentActiveLevel = e;
     let currentActiveSongList = document.getElementById("level-" + e);
     levelList.classList.add("inactive-level-list");
     currentActiveSongList.classList.add('song-list-loading')
@@ -20,21 +20,21 @@ export  function callSongList(e, songList, currentActiveLevel, levelList, backBu
     }, 1) 
 }
 
-export function hideSongList() {
-    let currentActiveSongList = songList[currentActiveLevel-1]
+export function hideSongList(displayState) {
+    let currentActiveSongList = document.getElementById("level-" + displayState.currentActiveLevel)
     // song-list-loading needs to be added FIRST THING.  That allows the list to display.
     // Immediately, active-song-list must be removed.  That creates the transition.
     // 250ms later, song-list-loading needs to be removed to reduce the navlistwrapper size.
     currentActiveSongList.classList.add('song-list-loading')
     currentActiveSongList.classList.remove("active-song-list")
     currentActiveSongList.classList.remove("active-song-list-short-screen")
-    levelList.classList.remove("inactive-level-list");
-    backButton.classList.remove("back-button-active") 
+    document.getElementById("level-list").classList.remove("inactive-level-list");
+    document.getElementById("back-button").classList.remove("back-button-active") 
     setTimeout(function(){
       currentActiveSongList.classList.remove('song-list-loading')
       
     }, 250) 
-    currentActiveLevel = ""
+    displayState.currentActiveLevel = ""
 }
   
 export async function loadSong(e) {

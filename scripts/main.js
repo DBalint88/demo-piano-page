@@ -74,11 +74,11 @@ Check - has the uLevel 2 user submitted all the songs from Level 2?
 
 // GENERATE THE SONG CONTENT TO THE PAGE
 let userSongs = getSongs(userProfile, songData);
-printSongsList(navListWrapper, userSongs, callSongList, determineSongValue, userProfile.handicap, loadSong, displayState.currentActiveLevel, backButton);
+printSongsList(navListWrapper, userSongs, callSongList, determineSongValue, userProfile.handicap, loadSong, displayState, backButton);
 // updateStatusLights();
 // handleWindowSize()
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
-// activateUI();
+activateUI(backButton, homeButton, submitButton, displayState);
 
 // UPDATE USER'S LEVEL
 // If a user's completedSongs array includes ALL of the songs with level == the user's level
