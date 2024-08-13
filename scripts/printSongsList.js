@@ -36,12 +36,12 @@ export function getSongs(userProfile, songData) {
 // }
 
 
-export function printSongsList (navListWrapper, userSongs, callSongList, determineSongValue, handicap, loadSong, displayState, backButton) {
+export function printSongsList (comps, userSongs, callSongList, determineSongValue, handicap, loadSong, displayState) {
     let levelList = document.createElement('div')
     levelList.setAttribute('id', 'level-list')
     let levelUl = document.createElement('ul')
     levelUl.setAttribute('id', 'level-ul')
-    navListWrapper.appendChild(levelList)
+    comps.navListWrapper.appendChild(levelList)
     levelList.appendChild(levelUl)
   
     for (let i=7; i <= userSongs.length; i++) {
@@ -54,7 +54,7 @@ export function printSongsList (navListWrapper, userSongs, callSongList, determi
       levelUl.appendChild(levelButton)
       levelButton.addEventListener('click', function(event) {
         const e = event.target.id;
-        callSongList(e, displayState, levelList, backButton)
+        callSongList(e, displayState, levelList, comps)
       });
   
       let songsContainer = document.createElement("div")
@@ -69,7 +69,7 @@ export function printSongsList (navListWrapper, userSongs, callSongList, determi
   
       let levelOl = document.createElement("ol")
   
-      navListWrapper.appendChild(songsContainer)
+      comps.navListWrapper.appendChild(songsContainer)
       songsContainer.appendChild(levelHeader)
       songsContainer.appendChild(levelValueHeader)
       songsContainer.appendChild(levelOl)
@@ -97,7 +97,10 @@ export function printSongsList (navListWrapper, userSongs, callSongList, determi
   
         levelOl.appendChild(song)
         song.appendChild(statusIcon)
-        song.addEventListener('click', loadSong)
+        song.addEventListener('click', function(event) {
+          const e = event.target;
+          loadSong(e, displayState);
+        });
   
       }
     }

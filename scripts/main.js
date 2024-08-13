@@ -1,3 +1,4 @@
+import { comps } from './comps.js';
 import { songData } from './songData.js';
 import { createSubmission, determineSongValue, countCurrentSongAttempts, submitSong, postSubmission, retractSubmission } from './createSubmission.js';
 import { userProfile, updateUserLevel } from './userProfile.js';
@@ -10,25 +11,7 @@ import { displayState } from './displayState.js'
 
 // DOM references
 // TO-DO: Test how many of these can be 'const'
-let songList = document.getElementsByClassName("song-list");
-let iframe = document.getElementById("iframe");
-let splash = document.getElementById("splash");
-let videoLink = document.getElementById("video-link");
-let videoIcon = document.getElementById("yt-icon")
-let pdfLink = document.getElementById("pdf-link");
-let pdfIcon = document.getElementById("pdf-icon")
-let homeButton = document.getElementById("home-button");
-let backButton = document.getElementById("back-button");
-let submitButton = document.getElementById("submit-button");
-const navListWrapper = document.getElementById("nav-list-wrapper");
-let levelList;
-let levelUl;
-const loginButton = document.getElementById("googleSignIn")
-const logoutButton = document.getElementById("signoutButton")
-const loadingGif = document.getElementById("loading-gif")
-let splashGreeting = document.getElementById("splash-greeting")
-let balintButton = document.createElement("button")
-let rossButton = document.createElement("button")
+
 
 
 // Set the week number (All submissions are due Friday of each week.)
@@ -74,11 +57,11 @@ Check - has the uLevel 2 user submitted all the songs from Level 2?
 
 // GENERATE THE SONG CONTENT TO THE PAGE
 let userSongs = getSongs(userProfile, songData);
-printSongsList(navListWrapper, userSongs, callSongList, determineSongValue, userProfile.handicap, loadSong, displayState, backButton);
+printSongsList(comps, userSongs, callSongList, determineSongValue, userProfile.handicap, loadSong, displayState);
 // updateStatusLights();
 // handleWindowSize()
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
-activateUI(backButton, homeButton, submitButton, displayState);
+activateUI(comps, displayState);
 
 // UPDATE USER'S LEVEL
 // If a user's completedSongs array includes ALL of the songs with level == the user's level
@@ -90,13 +73,7 @@ activateUI(backButton, homeButton, submitButton, displayState);
 // LOGGIN IN & LOGGIN OUT
 
 
-loginButton.addEventListener('click', () => {
-  loginButton.style.display = 'none'
-  loadingGif.style.display = 'block'
-  })
-logoutButton.addEventListener('click', () => {
-  splashGreeting.innerText = "Please log in with your Hamden.org account."
-})
+
 
 // onAuthStateChanged(auth, async (user) => {
 //   // Logic for when the user logs in. If succesful and profile exists, get userLevel & song arrays 

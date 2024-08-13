@@ -1,13 +1,20 @@
-export function activateUI(backButton, homeButton, submitButton, displayState) {
-    backButton.addEventListener("click", function() {
-      hideSongList(displayState)
+export function activateUI(comps, displayState) {
+    comps.loginButton.addEventListener('click', () => {
+      loginButton.style.display = 'none'
+      loadingGif.style.display = 'block'
+      })
+    comps.logoutButton.addEventListener('click', () => {
+      splashGreeting.innerText = "Please log in with your Hamden.org account."
+    })
+    comps.backButton.addEventListener("click", function() {
+      hideSongList(displayState, comps)
       });
-    homeButton.addEventListener("click", goHome);
+    comps.homeButton.addEventListener("click", goHome);
     // submitButton.addEventListener("click", submitSong);
 }
 
 
-export  function callSongList(e,displayState, levelList, backButton) {
+export  function callSongList(e, displayState, levelList, comps) {
     displayState.currentActiveLevel = e;
     let currentActiveSongList = document.getElementById("level-" + e);
     levelList.classList.add("inactive-level-list");
@@ -15,12 +22,12 @@ export  function callSongList(e,displayState, levelList, backButton) {
     setTimeout(function(){
       currentActiveSongList.classList.add("active-song-list")
       currentActiveSongList.classList.remove('song-list-loading')
-      backButton.classList.add("back-button-active") 
+      comps.backButton.classList.add("back-button-active") 
       // adjustListPosition()
     }, 1) 
 }
 
-export function hideSongList(displayState) {
+export function hideSongList(displayState, comps) {
     let currentActiveSongList = document.getElementById("level-" + displayState.currentActiveLevel)
     // song-list-loading needs to be added FIRST THING.  That allows the list to display.
     // Immediately, active-song-list must be removed.  That creates the transition.
@@ -29,7 +36,7 @@ export function hideSongList(displayState) {
     currentActiveSongList.classList.remove("active-song-list")
     currentActiveSongList.classList.remove("active-song-list-short-screen")
     document.getElementById("level-list").classList.remove("inactive-level-list");
-    document.getElementById("back-button").classList.remove("back-button-active") 
+    comps.backButton.classList.remove("back-button-active") 
     setTimeout(function(){
       currentActiveSongList.classList.remove('song-list-loading')
       
@@ -37,21 +44,21 @@ export function hideSongList(displayState) {
     displayState.currentActiveLevel = ""
 }
   
-export async function loadSong(e) {
+export async function loadSong(e, displaySate) {
     splash.style.display = "none";
     iframe.style.width = "100%";
     iframe.style.height = "100%";
     iframe.src = this.dataset.pdf + "#zoom=118&navpanes=0&pagemode=none";
     videoLink.href = this.dataset.video;
     pdfLink.href = this.dataset.pdf +"#zoom=83";
-    currentSongFbref = this.dataset.fbref
-    currentSongTitle = this.textContent
-    currentSongLevel = parseInt(this.dataset.level)
-    currentSongSeq = parseInt(this.dataset.seq)
-    currentSongValue = determineSongValue(currentSongLevel)
-    currentSongAttempts = await countCurrentSongAttempts()
-    console.log('loadSong says: currentSongAttempts = ', currentSongAttempts)
-    updateButtons(); 
+    currentSongFbref = e.dataset.fbref
+    currentSongTitle = e.textContent
+    currentSongLevel = parseInt(e.dataset.level)
+    currentSongSeq = parseInt(e.dataset.seq)
+    // // currentSongValue = determineSongValue(currentSongLevel)
+    // // currentSongAttempts = await countCurrentSongAttempts()
+    // console.log('loadSong says: currentSongAttempts = ', currentSongAttempts)
+    // updateButtons(); 
 }
   
 export function adjustListPosition() {
