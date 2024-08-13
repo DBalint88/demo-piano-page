@@ -44,17 +44,22 @@ export function hideSongList(displayState, comps) {
     displayState.currentActiveLevel = ""
 }
   
-export async function loadSong(e, displaySate) {
-    splash.style.display = "none";
-    iframe.style.width = "100%";
-    iframe.style.height = "100%";
-    iframe.src = this.dataset.pdf + "#zoom=118&navpanes=0&pagemode=none";
-    videoLink.href = this.dataset.video;
-    pdfLink.href = this.dataset.pdf +"#zoom=83";
-    currentSongFbref = e.dataset.fbref
-    currentSongTitle = e.textContent
-    currentSongLevel = parseInt(e.dataset.level)
-    currentSongSeq = parseInt(e.dataset.seq)
+export async function loadSong(e, displayState, comps) {
+    comps.splash.style.display = "none";
+    comps.iframe.style.width = "100%";
+    comps.iframe.style.height = "100%";
+    console.log(e);
+    comps.iframe.src = e.dataset.pdf + "#zoom=118&navpanes=0&pagemode=none";
+    comps.videoLink.href = e.dataset.video;
+    comps.pdfLink.href = e.dataset.pdf +"#zoom=83";
+    displayState.currentSongFbref = e.dataset.fbref
+    displayState.currentSongTitle = e.textContent
+    displayState.currentSongLevel = parseInt(e.dataset.level)
+    displayState.currentSongSeq = parseInt(e.dataset.seq)
+    console.log("title: " + displayState.currentSongTitle)
+    console.log("level: " + displayState.currentSongLevel)
+    console.log("seq: " + displayState.currentSongSeq)
+    console.log("fbref: " + displayState.currentSongFbref)
     // // currentSongValue = determineSongValue(currentSongLevel)
     // // currentSongAttempts = await countCurrentSongAttempts()
     // console.log('loadSong says: currentSongAttempts = ', currentSongAttempts)

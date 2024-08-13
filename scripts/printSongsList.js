@@ -99,7 +99,7 @@ export function printSongsList (comps, userSongs, callSongList, determineSongVal
         song.appendChild(statusIcon)
         song.addEventListener('click', function(event) {
           const e = event.target;
-          loadSong(e, displayState);
+          loadSong(e, displayState, comps);
         });
   
       }
