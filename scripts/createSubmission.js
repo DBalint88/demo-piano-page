@@ -1,4 +1,5 @@
 import { updateButtons } from "./userInterface.js";
+import { updateStatusLights } from "./updateStatusLights.js";
 
 export function submitSong(comps, displayState, userProfile, submissionBank) {
 
@@ -12,7 +13,6 @@ export function submitSong(comps, displayState, userProfile, submissionBank) {
   if (pendingSongs.includes(currentSongFbref)) {
     if (confirm("Are you sure you want to unsubmit " + currentSongTitle + "?")) {
       pendingSongs.splice(pendingSongs.indexOf(currentSongFbref), 1)
-      updateButtons(comps, displayState, userProfile);
       retractSubmission(displayState, userProfile, submissionBank);
     }
 
@@ -20,7 +20,6 @@ export function submitSong(comps, displayState, userProfile, submissionBank) {
     if (confirm("Are you sure you want to resubmit " + currentSongTitle + "?")) {
       pendingSongs.push(currentSongFbref)
       submissionBank.push(createSubmission(displayState, userProfile, submissionBank))
-      updateButtons(comps, displayState, userProfile);
       // if (currentSongLevel == userLevel) {
       //   // updateSongListLive()
       // }
@@ -30,17 +29,17 @@ export function submitSong(comps, displayState, userProfile, submissionBank) {
     if (confirm("Are you sure you want to submit " + currentSongTitle + "?")) {
       pendingSongs.push(currentSongFbref)
       submissionBank.push(createSubmission(displayState, userProfile, submissionBank))
-      console.log(submissionBank);
-      updateButtons(comps, displayState, userProfile);
       // if (currentSongLevel == userLevel) {
       //   // updateSongListLive()
       // }
     }
   }
+  updateStatusLights(userProfile);
+  updateButtons(comps, displayState, userProfile);
 }
 
 export function createSubmission(displayState, userProfile, submissionBank) {
-    console.log(userProfile.userID + displayState.currentSongFbref + "("+ countCurrentSongAttempts(displayState, userProfile, submissionBank) +")")
+    console.log("creating submission id: " + userProfile.userID + displayState.currentSongFbref + "("+ countCurrentSongAttempts(displayState, userProfile, submissionBank) +")")
     return {
         submissionID: userProfile.userID + displayState.currentSongFbref + "("+ countCurrentSongAttempts(displayState, userProfile, submissionBank) +")",
         userID: userProfile.userID,
@@ -84,6 +83,5 @@ export function retractSubmission(displayState, userProfile, submissionBank) {
     }
 
     submissionBank.splice(submissionBank.indexOf(result), 1)
-    console.log('retractSubmission says: currentSongAttempts = ', countCurrentSongAttempts(displayState, userProfile, submissionBank))
-    console.log('submission deleted successfully.')
+
 }

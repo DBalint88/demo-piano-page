@@ -1,4 +1,4 @@
-export function updateStatusLights() {
+export function updateStatusLights(userProfile) {
     let statusIcons = Array.from(document.getElementsByClassName('status-icon'))
     statusIcons.forEach((el) => {
       el.style.setProperty('background-color', 'black')
