@@ -19,7 +19,7 @@ export function activateUI(comps, displayState, userProfile, submissionBank) {
       goHome(comps, displayState, userProfile)
     });
     comps.submitButton.addEventListener("click", function() {
-      submitSong(displayState, userProfile, submissionBank);
+      submitSong(comps, displayState, userProfile, submissionBank);
     });
     comps.logoutButton.addEventListener("click", () => {
     });
@@ -135,6 +135,7 @@ export function goHome(comps, displayState, userProfile) {
 
 // CONTROL APPEARANCE OF YT, PDF, HOME, & SUBMIT BUTTONS
 export function updateButtons(comps, displayState, userProfile) {
+  console.log("updateButtons fired!")
   if (displayState.currentSongFbref == '') {
     comps.videoIcon.style.opacity = ".2"
     comps.videoLink.style.pointerEvents="none"
@@ -151,14 +152,17 @@ export function updateButtons(comps, displayState, userProfile) {
     comps.pdfLink.style.pointerEvents = "auto"
     comps.submitButton.style.pointerEvents="auto"
     if (userProfile.completedSongs.includes(displayState.currentSongFbref)) {
+      console.log("completedSongs includes currentSongFbref")
       comps.submitButton.src = "images/upload-icon.png"
       comps.submitButton.style.opacity = ".2"
       comps.submitButton.style.cursor = "default"
     } else if (userProfile.pendingSongs.includes(displayState.currentSongFbref)) {
+      console.log("pendingSongs includes currentSongFbref")
       comps.submitButton.src = "images/undo-icon.png"
       comps.submitButton.style.opacity = "1"
       comps.submitButton.style.cursor = "pointer"
     } else {
+      console.log("failedSongs includes currentSongFbref, or no arrays do.")
       comps.submitButton.src = "images/upload-icon.png"
       comps.submitButton.style.opacity = "1"
       comps.submitButton.style.cursor = "pointer"

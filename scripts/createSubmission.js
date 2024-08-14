@@ -1,4 +1,6 @@
-export function submitSong(displayState, userProfile, submissionBank) {
+import { updateButtons } from "./userInterface.js";
+
+export function submitSong(comps, displayState, userProfile, submissionBank) {
 
   let pendingSongs = userProfile.pendingSongs;
   let failedSongs = userProfile.failedSongs;
@@ -10,6 +12,7 @@ export function submitSong(displayState, userProfile, submissionBank) {
   if (pendingSongs.includes(currentSongFbref)) {
     if (confirm("Are you sure you want to unsubmit " + currentSongTitle + "?")) {
       pendingSongs.splice(pendingSongs.indexOf(currentSongFbref), 1)
+      updateButtons(comps, displayState, userProfile);
       // retractSubmission()
     }
 
@@ -17,6 +20,7 @@ export function submitSong(displayState, userProfile, submissionBank) {
     if (confirm("Are you sure you want to resubmit " + currentSongTitle + "?")) {
       pendingSongs.push(currentSongFbref)
       submissionBank.push(createSubmission(displayState, userProfile))
+      updateButtons(comps, displayState, userProfile);
       // if (currentSongLevel == userLevel) {
       //   // updateSongListLive()
       // }
@@ -26,7 +30,7 @@ export function submitSong(displayState, userProfile, submissionBank) {
     if (confirm("Are you sure you want to submit " + currentSongTitle + "?")) {
       pendingSongs.push(currentSongFbref)
       submissionBank.push(createSubmission(displayState, userProfile))
-      console.log(submissionBank)
+      updateButtons(comps, displayState, userProfile);
       // if (currentSongLevel == userLevel) {
       //   // updateSongListLive()
       // }
