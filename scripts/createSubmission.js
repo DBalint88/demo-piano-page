@@ -13,13 +13,13 @@ export function submitSong(comps, displayState, userProfile, submissionBank) {
     if (confirm("Are you sure you want to unsubmit " + currentSongTitle + "?")) {
       pendingSongs.splice(pendingSongs.indexOf(currentSongFbref), 1)
       updateButtons(comps, displayState, userProfile);
-      // retractSubmission()
+      retractSubmission(displayState, userProfile, submissionBank);
     }
 
   } else if (failedSongs.includes(currentSongFbref)) {
     if (confirm("Are you sure you want to resubmit " + currentSongTitle + "?")) {
       pendingSongs.push(currentSongFbref)
-      submissionBank.push(createSubmission(displayState, userProfile))
+      submissionBank.push(createSubmission(displayState, userProfile, submissionBank))
       updateButtons(comps, displayState, userProfile);
       // if (currentSongLevel == userLevel) {
       //   // updateSongListLive()
@@ -29,7 +29,8 @@ export function submitSong(comps, displayState, userProfile, submissionBank) {
   } else if (!completedSongs.includes(currentSongFbref)) {
     if (confirm("Are you sure you want to submit " + currentSongTitle + "?")) {
       pendingSongs.push(currentSongFbref)
-      submissionBank.push(createSubmission(displayState, userProfile))
+      submissionBank.push(createSubmission(displayState, userProfile, submissionBank))
+      console.log(submissionBank);
       updateButtons(comps, displayState, userProfile);
       // if (currentSongLevel == userLevel) {
       //   // updateSongListLive()
@@ -38,8 +39,10 @@ export function submitSong(comps, displayState, userProfile, submissionBank) {
   }
 }
 
-export function createSubmission(displayState, userProfile) {
+export function createSubmission(displayState, userProfile, submissionBank) {
+    console.log(userProfile.userID + displayState.currentSongFbref + "("+ countCurrentSongAttempts(displayState, userProfile, submissionBank) +")")
     return {
+        submissionID: userProfile.userID + displayState.currentSongFbref + "("+ countCurrentSongAttempts(displayState, userProfile, submissionBank) +")",
         userID: userProfile.userID,
         firstName: userProfile.firstName,
         lastName: userProfile.lastName,
@@ -59,57 +62,28 @@ export function createSubmission(displayState, userProfile) {
 
 
 // Submissions need to be named userId + songID + attempts
-export async function countCurrentSongAttempts() {
-    // Query the database for all user Submissions
+export function countCurrentSongAttempts(displayState, userProfile, submissionBank) {
+    // Query the database for all user Submissions of this song.
     let userSubmissions = []
-    const countQuery = query(subsRef, where("userID", "==", userID))
-    await getDocs(countQuery)
-      .then((snapshot) => {
-        snapshot.docs.forEach((sub) => {
-          userSubmissions.push(sub.id)
-        })
-      })
-    console.log('countCurrentSongAttempts 336 userSubmissions: ', userSubmissions)
-    let i = 1
-    while (true) {
-      console.log('countCurrentSongAttempts while loop.  Eval: ' + userID + currentSongFbref + '(' + i + ')')
-      if (userSubmissions.includes(userID + currentSongFbref + '(' + i + ')')) {
-        i++
-      } else {
-        console.log('countCurrentSongAttempts line343 returns: ', (i-1))
-        return (i-1);
+    for (const sub of submissionBank) {
+      if (sub.userID == userProfile.userID && sub.songfbRef == displayState.currentSongFbref) {
+        userSubmissions.push(sub);
       }
     }
+    return userSubmissions.length + 1;
 }
 
+export function retractSubmission(displayState, userProfile, submissionBank) {
 
+    console.log('trying to delete: ', userProfile.userID+displayState.currentSongFbref+'(' + (countCurrentSongAttempts(displayState, userProfile, submissionBank)-1) + ')')
+    let result = "";
+    for (const sub of submissionBank) {
+      if (sub.submissionID == userProfile.userID+displayState.currentSongFbref+'(' + (countCurrentSongAttempts(displayState, userProfile, submissionBank)-1) + ')') {
+          result = sub
+      }
+    }
 
-export async function postSubmission() {
-    console.log('createSubmission 484: Trying to create sub doc: ', userID+currentSongFbref+'('+(currentSongAttempts+1)+')')
-    await setDoc(doc(db, "submissions", userID+currentSongFbref+'('+(currentSongAttempts+1)+')'), {
-        resolved: false,
-        result: '',
-        timeStamp: serverTimestamp(),
-        week: currentWeek,
-        userID: userID,
-        lastName: userLastName,
-        firstName: username,
-        songfbRef: currentSongFbref,
-        songLevel: currentSongLevel,
-        songSeq: currentSongSeq,
-        songTitle: currentSongTitle,
-        pointValue: currentSongValue,
-        instructor: instructor
-      })
-      currentSongAttempts = await countCurrentSongAttempts()
-      console.log('createSubmission says: currentSongAttempts = ', currentSongAttempts)
-      console.log('submission sent successfully: ', userID+currentSongFbref+'('+(currentSongAttempts)+')')
-}
-
-export async function retractSubmission() {
-    console.log('trying to delete: ', userID+currentSongFbref+'(' + currentSongAttempts + ')')
-    await deleteDoc(doc(db, "submissions", userID+currentSongFbref+'(' + currentSongAttempts + ')'))
-    currentSongAttempts = await countCurrentSongAttempts()
-    console.log('retractSubmission says: currentSongAttempts = ', currentSongAttempts)
+    submissionBank.splice(submissionBank.indexOf(result), 1)
+    console.log('retractSubmission says: currentSongAttempts = ', countCurrentSongAttempts(displayState, userProfile, submissionBank))
     console.log('submission deleted successfully.')
 }

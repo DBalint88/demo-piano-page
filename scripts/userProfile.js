@@ -6,9 +6,9 @@ export let userProfile = {
     instructor: "balint",
     handicap: 1,
     level: 7,
-    pendingSongs: ['701'],
-    failedSongs: ['702'],
-    completedSongs: ['703']
+    pendingSongs: [],
+    failedSongs: [],
+    completedSongs: []
 }
 
 export async function updateUserLevel() {

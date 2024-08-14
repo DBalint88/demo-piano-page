@@ -1,4 +1,4 @@
-import { createSubmission, countCurrentSongAttempts, submitSong, postSubmission, retractSubmission } from './createSubmission.js';
+import { createSubmission, countCurrentSongAttempts, submitSong, retractSubmission } from './createSubmission.js';
 
 export function activateUI(comps, displayState, userProfile, submissionBank) {
     comps.loginButton.addEventListener('click', () => {
