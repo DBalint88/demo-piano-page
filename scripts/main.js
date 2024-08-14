@@ -18,6 +18,7 @@ comps.loginButton.addEventListener("click", function() {
   setTimeout(() => {
     let userSongs = getSongs(userProfile, songData);
     printSongsList(comps, userSongs, callSongList, determineSongValue, userProfile.handicap,  loadSong, displayState, userProfile);
+    updateQuotaDisplay(displayState, userProfile, submissionBank)
   }, 400);
   
 })

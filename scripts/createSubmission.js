@@ -1,4 +1,4 @@
-import { updateButtons } from "./userInterface.js";
+import { updateButtons, updateQuotaDisplay } from "./userInterface.js";
 import { updateStatusLights } from "./updateStatusLights.js";
 
 export function submitSong(comps, displayState, userProfile, submissionBank) {
@@ -29,6 +29,7 @@ export function submitSong(comps, displayState, userProfile, submissionBank) {
     if (confirm("Are you sure you want to submit " + currentSongTitle + "?")) {
       pendingSongs.push(currentSongFbref)
       submissionBank.push(createSubmission(displayState, userProfile, submissionBank))
+      console.log(submissionBank)
       // if (currentSongLevel == userLevel) {
       //   // updateSongListLive()
       // }
@@ -36,6 +37,7 @@ export function submitSong(comps, displayState, userProfile, submissionBank) {
   }
   updateStatusLights(userProfile);
   updateButtons(comps, displayState, userProfile);
+  updateQuotaDisplay(displayState, userProfile, submissionBank);
 }
 
 export function createSubmission(displayState, userProfile, submissionBank) {

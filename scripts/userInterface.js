@@ -85,7 +85,7 @@ export function loadSong(e, displayState, comps, userProfile) {
     displayState.currentSongTitle = e.textContent
     displayState.currentSongLevel = parseInt(e.dataset.level)
     displayState.currentSongSeq = parseInt(e.dataset.seq)
-    // // currentSongValue = determineSongValue(currentSongLevel)
+    displayState.currentSongValue = determineSongValue(displayState.currentSongLevel, userProfile.handicap)
     // // currentSongAttempts = await countCurrentSongAttempts()
     // console.log('loadSong says: currentSongAttempts = ', currentSongAttempts)
     updateButtons(comps, displayState, userProfile); 
@@ -171,29 +171,43 @@ export function updateButtons(comps, displayState, userProfile) {
 }
 
 // UPDATE THE QUOTA DISPLAY
-export async function updateQuotaDisplay() {
-    let currentWeekAttempted = 0
-    let currentWeekEarned = 0
-    let userCurrentWeekSubs = []
-    const quotaQuery = query(subsRef, where("userID", "==", userID), where("week", "==", currentWeek))
-    await getDocs(quotaQuery)
-      .then((snapshot) => {
-        snapshot.docs.forEach((sub) => {
-          userCurrentWeekSubs.push({ ...sub.data(), id: sub.id })
-        })
-      })
-    for (let i = 0; i < userCurrentWeekSubs.length; i++) {
-      const sub = userCurrentWeekSubs[i];
-      if (sub.resolved == false) {
-        currentWeekAttempted += sub.pointValue
-      } else if (sub.result == "pass") {
-        currentWeekEarned += sub.pointValue
+export function updateQuotaDisplay(displayState, userProfile, submissionBank) {
+    let attempted = 0;
+    let earned = 0;
+
+    for (const sub of submissionBank) {
+      if (sub.userID == userProfile.userID && sub.week == displayState.currentWeek && sub.result == "") {
+        attempted += sub.pointValue;
+      }
+      if (sub.userID == userProfile.userID && sub.week == displayState.currentWeek && sub.result == "pass") {
+        earned += sub.pointValue;
       }
     }
+
+    document.getElementById("points-attempted").innerText = attempted;
+    document.getElementById("points-earned").innerText = earned;
+
+  //   let currentWeekAttempted = 0
+  //   let currentWeekEarned = 0
+  //   let userCurrentWeekSubs = []
+  //   const quotaQuery = query(subsRef, where("userID", "==", userID), where("week", "==", currentWeek))
+  //   await getDocs(quotaQuery)
+  //     .then((snapshot) => {
+  //       snapshot.docs.forEach((sub) => {
+  //         userCurrentWeekSubs.push({ ...sub.data(), id: sub.id })
+  //       })
+  //     })
+  //   for (let i = 0; i < userCurrentWeekSubs.length; i++) {
+  //     const sub = userCurrentWeekSubs[i];
+  //     if (sub.resolved == false) {
+  //       currentWeekAttempted += sub.pointValue
+  //     } else if (sub.result == "pass") {
+  //       currentWeekEarned += sub.pointValue
+  //     }
+  //   }
     
     
-    document.getElementById("points-attempted").innerText = currentWeekAttempted;
-    document.getElementById("points-earned").innerText = currentWeekEarned;
+
   }
 
   export async function updateSongListLive() {
@@ -222,8 +236,8 @@ export function clearData(comps) {
 }
 
 //  DETERMINE POINT VALUE OF CURRENT SONG TOWARDS WEEKLY QUOTA
-export function determineSongValue(x, handicap) {
-  switch (x) {
+export function determineSongValue(songLevel, handicap) {
+  switch (songLevel) {
     case 7:
       return 15 * handicap
     case 8:
