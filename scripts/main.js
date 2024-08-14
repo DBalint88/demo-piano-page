@@ -6,7 +6,7 @@ import { setWeek } from './setWeek.js';
 import { instructorModal, instructorChoice } from './instructorModal.js';
 import { getSongs, printSongsList } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
-import { activateUI, callSongList, hideSongList, adjustListPosition, handleWindowSize, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData, loadSong } from './userInterface.js'
+import { activateUI, callSongList, hideSongList, adjustListPosition, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData, loadSong } from './userInterface.js'
 import { displayState } from './displayState.js'
 
 // Set the week number (All submissions are due Friday of each week.)
@@ -24,7 +24,6 @@ comps.loginButton.addEventListener("click", function() {
 // GENERATE THE SONG CONTENT TO THE PAGE
 
 // updateStatusLights();
-// handleWindowSize()
 
 // CLICK EVENTS TO SHOW / HIDE LEVELS AND SONGS, AND SUBMIT A SONG FOR REVIEW
 

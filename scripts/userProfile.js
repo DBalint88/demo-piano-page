@@ -4,7 +4,7 @@ export let userProfile = {
     nick: "Cam",
     instructor: "balint",
     handicap: 1,
-    level: 9,
+    level: 7,
     pendingSongs: [],
     failedSongs: [],
     completedSongs: []

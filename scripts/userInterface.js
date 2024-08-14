@@ -19,6 +19,10 @@ export function activateUI(comps, displayState, userProfile) {
     // submitButton.addEventListener("click", submitSong);
     comps.logoutButton.addEventListener("click", () => {
     });
+    window.addEventListener('resize', () => {
+      adjustListPosition(comps);
+    });
+  
 }
 
 export function logIn(comps, userProfile) {
@@ -28,7 +32,7 @@ export function logIn(comps, userProfile) {
     setTimeout(function() {
       comps.loadingGif.style.display = 'none';
       comps.logoutButton.style.display = 'flex'
-      // adjustListPosition()
+      adjustListPosition(comps)
     }, 400)   
 
     const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -46,7 +50,7 @@ export  function callSongList(e, displayState, levelList, comps) {
       currentActiveSongList.classList.add("active-song-list")
       currentActiveSongList.classList.remove('song-list-loading')
       comps.backButton.classList.add("back-button-active") 
-      // adjustListPosition()
+      adjustListPosition(comps)
     }, 1) 
 }
 
@@ -89,8 +93,8 @@ export function loadSong(e, displayState, comps, userProfile) {
     updateButtons(comps, displayState, userProfile); 
 }
   
-export function adjustListPosition() {
-    let wrapperHeight = navListWrapper.clientHeight;
+export function adjustListPosition(comps) {
+    let wrapperHeight = comps.navListWrapper.clientHeight;
 
     setTimeout(function(){
         try {
@@ -116,9 +120,7 @@ export function adjustListPosition() {
     }, 1)  
 }
   
-export function handleWindowSize(window) {
-    window.addEventListener('resize', adjustListPosition);
-}
+
 
 export function goHome(comps, displayState, userProfile) {
     comps.iframe.style.width = '0';
