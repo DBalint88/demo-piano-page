@@ -1,4 +1,6 @@
-export function activateUI(comps, displayState, userProfile) {
+import { createSubmission, countCurrentSongAttempts, submitSong, postSubmission, retractSubmission } from './createSubmission.js';
+
+export function activateUI(comps, displayState, userProfile, submissionBank) {
     comps.loginButton.addEventListener('click', () => {
       logIn(comps, userProfile)
     })
@@ -16,7 +18,9 @@ export function activateUI(comps, displayState, userProfile) {
     comps.homeButton.addEventListener("click", function() {
       goHome(comps, displayState, userProfile)
     });
-    // submitButton.addEventListener("click", submitSong);
+    comps.submitButton.addEventListener("click", function() {
+      submitSong(displayState, userProfile, submissionBank);
+    });
     comps.logoutButton.addEventListener("click", () => {
     });
     window.addEventListener('resize', () => {
@@ -26,7 +30,6 @@ export function activateUI(comps, displayState, userProfile) {
 }
 
 export function logIn(comps, userProfile) {
-  console.log("logIn fired")
     comps.loginButton.style.display = 'none'
     comps.loadingGif.style.display = 'block'
     setTimeout(function() {
@@ -75,7 +78,6 @@ export function loadSong(e, displayState, comps, userProfile) {
     comps.splash.style.display = "none";
     comps.iframe.style.width = "100%";
     comps.iframe.style.height = "100%";
-    console.log(e);
     comps.iframe.src = e.dataset.pdf + "#zoom=118&navpanes=0&pagemode=none";
     comps.videoLink.href = e.dataset.video;
     comps.pdfLink.href = e.dataset.pdf +"#zoom=83";
@@ -83,10 +85,6 @@ export function loadSong(e, displayState, comps, userProfile) {
     displayState.currentSongTitle = e.textContent
     displayState.currentSongLevel = parseInt(e.dataset.level)
     displayState.currentSongSeq = parseInt(e.dataset.seq)
-    console.log("title: " + displayState.currentSongTitle)
-    console.log("level: " + displayState.currentSongLevel)
-    console.log("seq: " + displayState.currentSongSeq)
-    console.log("fbref: " + displayState.currentSongFbref)
     // // currentSongValue = determineSongValue(currentSongLevel)
     // // currentSongAttempts = await countCurrentSongAttempts()
     // console.log('loadSong says: currentSongAttempts = ', currentSongAttempts)
@@ -102,7 +100,6 @@ export function adjustListPosition(comps) {
         if (typeof songList == "undefined") {
             songList = document.getElementsByClassName('active-song-list-short-screen')[0]
         }
-        console.log(songList)
         let songListHeight = songList.clientHeight;
 
         if (wrapperHeight >= songListHeight) {
@@ -138,7 +135,6 @@ export function goHome(comps, displayState, userProfile) {
 
 // CONTROL APPEARANCE OF YT, PDF, HOME, & SUBMIT BUTTONS
 export function updateButtons(comps, displayState, userProfile) {
-  console.log("updateButtons fired");
   if (displayState.currentSongFbref == '') {
     comps.videoIcon.style.opacity = ".2"
     comps.videoLink.style.pointerEvents="none"
@@ -215,9 +211,22 @@ export async function updateQuotaDisplay() {
 
   // CLEAR DATA ON LOG OUT, OR TO RESET PAGE ON LEVEL CHANGES
 export function clearData(comps) {
-  console.log("clearData fired")
     comps.backButton.classList.remove("back-button-active")
     while (comps.navListWrapper.firstChild) {
       comps.navListWrapper.removeChild(comps.navListWrapper.firstChild)
     }
+}
+
+//  DETERMINE POINT VALUE OF CURRENT SONG TOWARDS WEEKLY QUOTA
+export function determineSongValue(x, handicap) {
+  switch (x) {
+    case 7:
+      return 15 * handicap
+    case 8:
+      return 20 * handicap
+    case 9:
+      return 30 * handicap
+    default:
+      return 60
   }
+}

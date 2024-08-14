@@ -4,5 +4,6 @@ export let displayState = {
     currentSongLevel: 0,
     currentSongValue: 0,
     currentSongSeq: 0,
-    currentActiveLevel: ""
+    currentActiveLevel: "",
+    currentWeek: null
   }

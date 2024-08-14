@@ -1,34 +1,58 @@
-export function createSubmission() {
+export function submitSong(displayState, userProfile, submissionBank) {
+
+  let pendingSongs = userProfile.pendingSongs;
+  let failedSongs = userProfile.failedSongs;
+  let completedSongs = userProfile.completedSongs;
+
+  let currentSongFbref = displayState.currentSongFbref;
+  let currentSongTitle = displayState.currentSongTitle
+
+  if (pendingSongs.includes(currentSongFbref)) {
+    if (confirm("Are you sure you want to unsubmit " + currentSongTitle + "?")) {
+      pendingSongs.splice(pendingSongs.indexOf(currentSongFbref), 1)
+      // retractSubmission()
+    }
+
+  } else if (failedSongs.includes(currentSongFbref)) {
+    if (confirm("Are you sure you want to resubmit " + currentSongTitle + "?")) {
+      pendingSongs.push(currentSongFbref)
+      submissionBank.push(createSubmission(displayState, userProfile))
+      // if (currentSongLevel == userLevel) {
+      //   // updateSongListLive()
+      // }
+    }
+
+  } else if (!completedSongs.includes(currentSongFbref)) {
+    if (confirm("Are you sure you want to submit " + currentSongTitle + "?")) {
+      pendingSongs.push(currentSongFbref)
+      submissionBank.push(createSubmission(displayState, userProfile))
+      console.log(submissionBank)
+      // if (currentSongLevel == userLevel) {
+      //   // updateSongListLive()
+      // }
+    }
+  }
+}
+
+export function createSubmission(displayState, userProfile) {
     return {
-        userID: null,
-        firstName: "",
-        lastName: "",
-        instructor: "",
-        pointValue: null,
+        userID: userProfile.userID,
+        firstName: userProfile.firstName,
+        lastName: userProfile.lastName,
+        instructor: userProfile.instructor,
+        pointValue: displayState.currentSongValue,
         resolved: false,
         result: "",
-        songLevel: null,
-        songSeq: null,
-        songTitle: "",
-        songfbRef: "",
-        timeStamp: null,
-        week: null
+        songLevel: displayState.currentSongLevel,
+        songSeq: displayState.currentSongSeq,
+        songTitle: displayState.currentSongTitle,
+        songfbRef: displayState.currentSongFbref,
+        timeStamp: new Date(),
+        week: displayState.currentWeek
     }
 }
 
-//  DETERMINE POINT VALUE OF CURRENT SONG TOWARDS WEEKLY QUOTA
-export function determineSongValue(x, handicap) {
-    switch (x) {
-      case 7:
-        return 15 * handicap
-      case 8:
-        return 20 * handicap
-      case 9:
-        return 30 * handicap
-      default:
-        return 60
-    }
-}
+
 
 // Submissions need to be named userId + songID + attempts
 export async function countCurrentSongAttempts() {
@@ -54,44 +78,7 @@ export async function countCurrentSongAttempts() {
     }
 }
 
-export async function submitSong(e) {
-    if (pendingSongs.includes(currentSongFbref)) {
-      if (confirm("Are you sure you want to unsubmit " + currentSongTitle + "?")) {
-        const docRef = doc(db, 'userProfiles', userID)
-        pendingSongs.splice(pendingSongs.indexOf(currentSongFbref), 1)
-        updateDoc(docRef, {
-        pendingSongs: pendingSongs,
-        })
-        retractSubmission()
-      }
-  
-    } else if (failedSongs.includes(currentSongFbref)) {
-      if (confirm("Are you sure you want to resubmit " + currentSongTitle + "?")) {
-        const docRef = doc(db, 'userProfiles', userID)
-        pendingSongs.push(currentSongFbref)
-        updateDoc(docRef, {
-        pendingSongs: pendingSongs,
-        })
-        createSubmission()
-        if (currentSongLevel == userLevel) {
-          updateSongListLive()
-        }
-      }
-  
-    } else if (!completedSongs.includes(currentSongFbref)) {
-      if (confirm("Are you sure you want to submit " + currentSongTitle + "?")) {
-        pendingSongs.push(currentSongFbref)
-        const docRef = doc(db, 'userProfiles', userID)
-        updateDoc(docRef, {
-        pendingSongs: pendingSongs,
-        })
-        createSubmission()
-        if (currentSongLevel == userLevel) {
-          updateSongListLive()
-        }
-      }
-    }
-}
+
 
 export async function postSubmission() {
     console.log('createSubmission 484: Trying to create sub doc: ', userID+currentSongFbref+'('+(currentSongAttempts+1)+')')

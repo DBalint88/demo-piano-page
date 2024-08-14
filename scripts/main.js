@@ -1,18 +1,18 @@
+import { activateUI, callSongList, hideSongList, adjustListPosition, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData, loadSong, determineSongValue } from './userInterface.js'
 import { comps } from './comps.js';
 import { songData } from './songData.js';
-import { createSubmission, determineSongValue, countCurrentSongAttempts, submitSong, postSubmission, retractSubmission } from './createSubmission.js';
+import { submissionBank } from './submissionBank.js';
 import { userProfile, updateUserLevel } from './userProfile.js';
 import { setWeek } from './setWeek.js';
 import { instructorModal, instructorChoice } from './instructorModal.js';
 import { getSongs, printSongsList } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
-import { activateUI, callSongList, hideSongList, adjustListPosition, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData, loadSong } from './userInterface.js'
+
 import { displayState } from './displayState.js'
 
 // Set the week number (All submissions are due Friday of each week.)
-const currentWeek = setWeek();
-
-activateUI(comps, displayState, userProfile);
+displayState.currentWeek = setWeek();
+activateUI(comps, displayState, userProfile, submissionBank);
 
 comps.loginButton.addEventListener("click", function() {
   setTimeout(() => {
