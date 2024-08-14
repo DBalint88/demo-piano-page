@@ -6,6 +6,7 @@ export let userProfile = {
     instructor: "balint",
     handicap: 1,
     level: 7,
+    viewableSongs: [],
     pendingSongs: [],
     failedSongs: [],
     completedSongs: []

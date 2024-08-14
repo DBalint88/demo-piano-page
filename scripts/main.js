@@ -1,4 +1,4 @@
-import { activateUI, callSongList, hideSongList, adjustListPosition, goHome, updateButtons, updateQuotaDisplay, updateSongListLive, clearData, loadSong, determineSongValue } from './userInterface.js'
+import { activateUI, callSongList, hideSongList, adjustListPosition, goHome, updateButtons, updateQuotaDisplay, clearData, loadSong, determineSongValue } from './userInterface.js'
 import { comps } from './comps.js';
 import { songData } from './songData.js';
 import { submissionBank } from './submissionBank.js';
@@ -13,15 +13,25 @@ import { displayState } from './displayState.js'
 // Set the week number (All submissions are due Friday of each week.)
 displayState.currentWeek = setWeek();
 activateUI(comps, displayState, userProfile, submissionBank);
-
-comps.loginButton.addEventListener("click", function() {
-  setTimeout(() => {
-    let userSongs = getSongs(userProfile, songData);
-    printSongsList(comps, userSongs, callSongList, determineSongValue, userProfile.handicap,  loadSong, displayState, userProfile);
+comps.loginButton.addEventListener('click', () => {
+  comps.loginButton.style.display = 'none'
+  comps.loadingGif.style.display = 'block'
+  setTimeout(function() {
+    comps.loadingGif.style.display = 'none';
+    comps.logoutButton.style.display = 'flex'
+    userProfile.viewableSongs = getSongs(userProfile.level, songData);
+    printSongsList(comps, displayState, userProfile, callSongList, loadSong);
     updateQuotaDisplay(displayState, userProfile, submissionBank)
-  }, 400);
-  
+    updateStatusLights(userProfile);
+    adjustListPosition(comps)
+  }, 400)   
+
+  const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+  const d = new Date();
+    let day = weekday[d.getDay()];
+  comps.splashGreeting.innerText = (`Happy ${day}, ${userProfile.nick}! Please click a Level on the left to get started.`)
 })
+
 // GENERATE THE SONG CONTENT TO THE PAGE
 
 // updateStatusLights();

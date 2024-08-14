@@ -1,8 +1,10 @@
+import { determineSongValue } from "./userInterface.js";
+
 // FETCH SONGS APPROPRIATE TO THE USER'S LEVEL
 
-export function getSongs(userProfile, songData) {
+export function getSongs(level, songData) {
   let userSongs = [];
-  for (let i=0; i < userProfile.level; i++) {
+  for (let i=0; i < level; i++) {
     let levelList = [];
       
     for (let song of songData) {
@@ -36,7 +38,7 @@ export function getSongs(userProfile, songData) {
 // }
 
 
-export function printSongsList (comps, userSongs, callSongList, determineSongValue, handicap, loadSong, displayState, userProfile) {
+export function printSongsList (comps, displayState, userProfile, callSongList, loadSong) {
     let levelList = document.createElement('div')
     levelList.setAttribute('id', 'level-list')
     let levelUl = document.createElement('ul')
@@ -44,7 +46,7 @@ export function printSongsList (comps, userSongs, callSongList, determineSongVal
     comps.navListWrapper.appendChild(levelList)
     levelList.appendChild(levelUl)
   
-    for (let i=7; i <= userSongs.length; i++) {
+    for (let i=7; i <= userProfile.viewableSongs.length; i++) {
   
       // Print the level list
       let levelButton = document.createElement('li')
@@ -65,7 +67,7 @@ export function printSongsList (comps, userSongs, callSongList, determineSongVal
       levelHeader.textContent = 'Level ' + i
   
       let levelValueHeader = document.createElement('h4')
-      levelValueHeader.textContent = '(' + determineSongValue(i, handicap) + ' points each)'
+      levelValueHeader.textContent = '(' + determineSongValue(i, userProfile.handicap) + ' points each)'
   
       let levelOl = document.createElement("ol")
   
@@ -77,10 +79,10 @@ export function printSongsList (comps, userSongs, callSongList, determineSongVal
   
       // Print the song buttons
       
-      for(let j=0; j<userSongs[i-1].length; j++) {
+      for(let j=0; j<userProfile.viewableSongs[i-1].length; j++) {
         let song = document.createElement("li");
         song.classList.add("song-button")
-        let songSrc = userSongs[i-1][j]
+        let songSrc = userProfile.viewableSongs[i-1][j]
         song.setAttribute("data-level", i)
         song.setAttribute("data-seq", (j+1))
         song.setAttribute("data-pdf", songSrc.image)

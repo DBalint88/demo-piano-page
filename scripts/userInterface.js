@@ -1,9 +1,8 @@
 import { createSubmission, countCurrentSongAttempts, submitSong, retractSubmission } from './createSubmission.js';
+import { updateStatusLights } from './updateStatusLights.js';
 
 export function activateUI(comps, displayState, userProfile, submissionBank) {
-    comps.loginButton.addEventListener('click', () => {
-      logIn(comps, userProfile)
-    })
+    
     comps.logoutButton.addEventListener('click', () => {
       comps.splashGreeting.innerText = "Please log in to your fake demo account:"
 
@@ -11,6 +10,7 @@ export function activateUI(comps, displayState, userProfile, submissionBank) {
       comps.loginButton.style.display = 'flex'
 
       clearData(comps)
+
     })
     comps.backButton.addEventListener("click", function() {
       hideSongList(displayState, comps)
@@ -29,20 +29,6 @@ export function activateUI(comps, displayState, userProfile, submissionBank) {
   
 }
 
-export function logIn(comps, userProfile) {
-    comps.loginButton.style.display = 'none'
-    comps.loadingGif.style.display = 'block'
-    setTimeout(function() {
-      comps.loadingGif.style.display = 'none';
-      comps.logoutButton.style.display = 'flex'
-      adjustListPosition(comps)
-    }, 400)   
-
-    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    const d = new Date();
-      let day = weekday[d.getDay()];
-    comps.splashGreeting.innerText = (`Happy ${day}, ${userProfile.nick}! Please click a Level on the left to get started.`)
-}
 
 export  function callSongList(e, displayState, levelList, comps) {
     displayState.currentActiveLevel = e;
@@ -86,8 +72,6 @@ export function loadSong(e, displayState, comps, userProfile) {
     displayState.currentSongLevel = parseInt(e.dataset.level)
     displayState.currentSongSeq = parseInt(e.dataset.seq)
     displayState.currentSongValue = determineSongValue(displayState.currentSongLevel, userProfile.handicap)
-    // // currentSongAttempts = await countCurrentSongAttempts()
-    // console.log('loadSong says: currentSongAttempts = ', currentSongAttempts)
     updateButtons(comps, displayState, userProfile); 
 }
   
@@ -186,53 +170,37 @@ export function updateQuotaDisplay(displayState, userProfile, submissionBank) {
 
     document.getElementById("points-attempted").innerText = attempted;
     document.getElementById("points-earned").innerText = earned;
-
-  //   let currentWeekAttempted = 0
-  //   let currentWeekEarned = 0
-  //   let userCurrentWeekSubs = []
-  //   const quotaQuery = query(subsRef, where("userID", "==", userID), where("week", "==", currentWeek))
-  //   await getDocs(quotaQuery)
-  //     .then((snapshot) => {
-  //       snapshot.docs.forEach((sub) => {
-  //         userCurrentWeekSubs.push({ ...sub.data(), id: sub.id })
-  //       })
-  //     })
-  //   for (let i = 0; i < userCurrentWeekSubs.length; i++) {
-  //     const sub = userCurrentWeekSubs[i];
-  //     if (sub.resolved == false) {
-  //       currentWeekAttempted += sub.pointValue
-  //     } else if (sub.result == "pass") {
-  //       currentWeekEarned += sub.pointValue
-  //     }
-  //   }
-    
-    
-
   }
 
-  export async function updateSongListLive() {
-    let allCurrentLevelSongs = []
-    songs[userLevel-1].forEach((element) => allCurrentLevelSongs.push(element.id))
-    let allCurrentLevelSubmissions = completedSongs.concat(pendingSongs)
-  
-    let checker = (arr, target) => target.every(v => arr.includes(v));
-  
-    if (checker(allCurrentLevelSubmissions, allCurrentLevelSongs)) {
-      let temp = userLevel + 1
-      const docRef = doc(db, 'userProfiles', userID)
-      let docSnap = await getDoc(docRef);
-      clearData()
-      getUserData(docSnap)
-      getSongs(temp)
-    } 
-  }
 
-  // CLEAR DATA ON LOG OUT, OR TO RESET PAGE ON LEVEL CHANGES
+  // export function checkUserProgress () {
+
+
+  //   // let allCurrentLevelSongs = []
+  //   // songs[userLevel-1].forEach((element) => allCurrentLevelSongs.push(element.id))
+  //   // let allCurrentLevelSubmissions = completedSongs.concat(pendingSongs)
+  
+  //   // let checker = (arr, target) => target.every(v => arr.includes(v));
+  
+  //   // if (checker(allCurrentLevelSubmissions, allCurrentLevelSongs)) {
+  //   //   let temp = userLevel + 1
+  //   //   const docRef = doc(db, 'userProfiles', userID)
+  //   //   let docSnap = await getDoc(docRef);
+  //   //   clearData()
+  //   //   getUserData(docSnap)
+  //   //   getSongs(temp)
+  //   // } 
+  // }
+
+  // CLEAR DISPLAY ON LOG OUT, OR TO RESET PAGE ON LEVEL CHANGES
 export function clearData(comps) {
     comps.backButton.classList.remove("back-button-active")
     while (comps.navListWrapper.firstChild) {
       comps.navListWrapper.removeChild(comps.navListWrapper.firstChild)
     }
+    // Quota display:
+    document.getElementById("points-attempted").innerText = "";
+    document.getElementById("points-earned").innerText = "";
 }
 
 //  DETERMINE POINT VALUE OF CURRENT SONG TOWARDS WEEKLY QUOTA
