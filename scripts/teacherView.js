@@ -144,7 +144,8 @@ export function buildSubmissionLists(comps, submissionBank, userProfile, display
             undoButton.textContent = "Undo"
             undoButton.addEventListener("click", (event) => {
                 event.preventDefault()
-                // undoFeedback(sub.id, sub.songfbRef, sub.userID, sub.result)
+                undoFeedback(userProfile, submissionBank, sub.submissionID, sub.songfbRef, sub.result)
+                buildSubmissionLists(comps, submissionBank, userProfile, displayState)
             })
 
             gradeForm.appendChild(undoButton)
@@ -201,6 +202,25 @@ export function processFeedback(id, songfbRef, userProfile, passfail, submission
         }
     }
 }
+
+export function undoFeedback(userProfile, submissionBank, id, songfbRef, passfail) {
+    userProfile.pendingSongs.push(songfbRef)
+    if (passfail == "pass") {
+      userProfile.completedSongs.splice(userProfile.completedSongs.indexOf(songfbRef), 1)
+    } else if (passfail == "fail") {
+      userProfile.failedSongs.splice(userProfile.failedSongs.indexOf(songfbRef), 1)
+    }
+    for (const sub of submissionBank) {
+        console.log("sub.sumissionID = " + sub.submissionID)
+        console.log("id = " + id)
+      if (sub.submissionID == id) {
+        sub.resolved = false;
+        sub.result = "";
+      }
+    }
+  
+  }
+
 
 export function wipeSubmissionDisplay(comps) {
     while(comps.unresolvedRecordWrapper.children.length > 1) {
