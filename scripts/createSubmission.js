@@ -2,7 +2,7 @@ import { updateButtons, updateQuotaDisplay } from "./userInterface.js";
 import { updateStatusLights } from "./updateStatusLights.js";
 import { checkUserProgress } from "./printSongsList.js";
 
-export function submitSong(comps, displayState, userProfile, submissionBank, songData) {
+export function submitSong(comps, displayState, userProfile, submissionBank, songData, callSongList, loadSong, printSongsList) {
 
   let pendingSongs = userProfile.pendingSongs;
   let failedSongs = userProfile.failedSongs;
@@ -39,7 +39,11 @@ export function submitSong(comps, displayState, userProfile, submissionBank, son
   updateStatusLights(userProfile);
   updateButtons(comps, displayState, userProfile);
   updateQuotaDisplay(displayState, userProfile, submissionBank);
-  checkUserProgress(comps, userProfile, songData)
+  if (checkUserProgress(comps, userProfile, songData, displayState)) {
+    printSongsList (comps, displayState, userProfile, callSongList, loadSong)
+    updateStatusLights(userProfile);
+    updateQuotaDisplay(displayState, userProfile, submissionBank);
+  }
 }
 
 export function createSubmission(displayState, userProfile, submissionBank) {

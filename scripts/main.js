@@ -12,7 +12,7 @@ import { displayState } from './displayState.js'
 
 // Set the week number (All submissions are due Friday of each week.)
 displayState.currentWeek = setWeek();
-activateUI(comps, displayState, userProfile, submissionBank, songData);
+activateUI(comps, displayState, userProfile, submissionBank, songData, callSongList, loadSong, printSongsList);
 comps.loginButton.addEventListener('click', () => {
   comps.loginButton.style.display = 'none'
   comps.loadingGif.style.display = 'block'

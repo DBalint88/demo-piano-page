@@ -1,7 +1,7 @@
 import { createSubmission, countCurrentSongAttempts, submitSong, retractSubmission } from './createSubmission.js';
 import { updateStatusLights } from './updateStatusLights.js';
 
-export function activateUI(comps, displayState, userProfile, submissionBank, songData) {
+export function activateUI(comps, displayState, userProfile, submissionBank, songData, callSongList, loadSong, printSongsList) {
     
     comps.logoutButton.addEventListener('click', () => {
       comps.splashGreeting.innerText = "Please log in to your fake demo account:"
@@ -9,7 +9,7 @@ export function activateUI(comps, displayState, userProfile, submissionBank, son
       comps.logoutButton.style.display = 'none'
       comps.loginButton.style.display = 'flex'
 
-      clearData(comps)
+      clearData(comps, userProfile)
 
     })
     comps.backButton.addEventListener("click", function() {
@@ -19,7 +19,7 @@ export function activateUI(comps, displayState, userProfile, submissionBank, son
       goHome(comps, displayState, userProfile)
     });
     comps.submitButton.addEventListener("click", function() {
-      submitSong(comps, displayState, userProfile, submissionBank, songData);
+      submitSong(comps, displayState, userProfile, submissionBank, songData, callSongList, loadSong, printSongsList);
     });
     comps.logoutButton.addEventListener("click", () => {
     });
@@ -174,7 +174,8 @@ export function updateQuotaDisplay(displayState, userProfile, submissionBank) {
 
 
   // CLEAR DISPLAY ON LOG OUT, OR TO RESET PAGE ON LEVEL CHANGES
-export function clearData(comps) {
+export function clearData(comps, userProfile) {
+    userProfile.viewableSongs = [];
     comps.backButton.classList.remove("back-button-active")
     while (comps.navListWrapper.firstChild) {
       comps.navListWrapper.removeChild(comps.navListWrapper.firstChild)
