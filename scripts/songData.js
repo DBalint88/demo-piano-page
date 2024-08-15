@@ -3,7 +3,7 @@ export const songData = [
         level: 7,
         sequence: 1,
         title: "'Round the Mountain",
-        image: "../images/07-shell-be-comin-round-the-mountain.pdf",
+        image: "../images/07-round-the-mountain.pdf",
         youtube: "https://youtu.be/T0kG5GiVvqQ",
         fbRef: "701"
     },
