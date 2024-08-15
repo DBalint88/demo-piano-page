@@ -72,6 +72,7 @@ body {
 }
 
 #teacher-content-wrapper {
+  display: none;
   background-color: black;
   border: .5rem solid rgb(0,70,0);
   width: 100%;

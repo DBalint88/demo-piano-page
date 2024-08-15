@@ -18,5 +18,7 @@ export const comps = {
     rossButton: document.createElement("button"),
     viewSwapButton: document.getElementById("view-swap-button"),
     studentContentWrapper: document.getElementById("student-content-wrapper"),
-    teacherContentWrapper: document.getElementById("teacher-content-wrapper")
+    teacherContentWrapper: document.getElementById("teacher-content-wrapper"),
+    unresolvedRecordWrapper: document.getElementById("unresolved-record-wrapper"),
+    resolvedRecordWrapper: document.getElementById("resolved-record-wrapper")
 }

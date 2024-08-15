@@ -1,6 +1,7 @@
 import { updateButtons, updateQuotaDisplay } from "./userInterface.js";
 import { updateStatusLights } from "./updateStatusLights.js";
 import { checkUserProgress } from "./printSongsList.js";
+import { buildSubmissionLists } from "./teacherView.js";
 
 export function submitSong(comps, displayState, userProfile, submissionBank, songData, callSongList, loadSong, printSongsList) {
 
@@ -36,6 +37,8 @@ export function submitSong(comps, displayState, userProfile, submissionBank, son
       // }
     }
   }
+  console.log(submissionBank)
+  buildSubmissionLists(comps, submissionBank, userProfile);
   updateStatusLights(userProfile);
   updateButtons(comps, displayState, userProfile);
   updateQuotaDisplay(displayState, userProfile, submissionBank);
@@ -77,6 +80,7 @@ export function countCurrentSongAttempts(displayState, userProfile, submissionBa
         userSubmissions.push(sub);
       }
     }
+    
     return userSubmissions.length + 1;
 }
 
