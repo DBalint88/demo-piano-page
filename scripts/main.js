@@ -2,17 +2,17 @@ import { activateUI, callSongList, hideSongList, adjustListPosition, goHome, upd
 import { comps } from './comps.js';
 import { songData } from './songData.js';
 import { submissionBank } from './submissionBank.js';
-import { userProfile, updateUserLevel } from './userProfile.js';
+import { userProfile } from './userProfile.js';
 import { setWeek } from './setWeek.js';
 import { instructorModal, instructorChoice } from './instructorModal.js';
-import { getSongs, printSongsList } from './printSongsList.js';
+import { getSongs, printSongsList, checkUserProgress } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
 
 import { displayState } from './displayState.js'
 
 // Set the week number (All submissions are due Friday of each week.)
 displayState.currentWeek = setWeek();
-activateUI(comps, displayState, userProfile, submissionBank);
+activateUI(comps, displayState, userProfile, submissionBank, songData);
 comps.loginButton.addEventListener('click', () => {
   comps.loginButton.style.display = 'none'
   comps.loadingGif.style.display = 'block'

@@ -1,7 +1,7 @@
 import { createSubmission, countCurrentSongAttempts, submitSong, retractSubmission } from './createSubmission.js';
 import { updateStatusLights } from './updateStatusLights.js';
 
-export function activateUI(comps, displayState, userProfile, submissionBank) {
+export function activateUI(comps, displayState, userProfile, submissionBank, songData) {
     
     comps.logoutButton.addEventListener('click', () => {
       comps.splashGreeting.innerText = "Please log in to your fake demo account:"
@@ -19,7 +19,7 @@ export function activateUI(comps, displayState, userProfile, submissionBank) {
       goHome(comps, displayState, userProfile)
     });
     comps.submitButton.addEventListener("click", function() {
-      submitSong(comps, displayState, userProfile, submissionBank);
+      submitSong(comps, displayState, userProfile, submissionBank, songData);
     });
     comps.logoutButton.addEventListener("click", () => {
     });
@@ -172,25 +172,6 @@ export function updateQuotaDisplay(displayState, userProfile, submissionBank) {
     document.getElementById("points-earned").innerText = earned;
   }
 
-
-  // export function checkUserProgress () {
-
-
-  //   // let allCurrentLevelSongs = []
-  //   // songs[userLevel-1].forEach((element) => allCurrentLevelSongs.push(element.id))
-  //   // let allCurrentLevelSubmissions = completedSongs.concat(pendingSongs)
-  
-  //   // let checker = (arr, target) => target.every(v => arr.includes(v));
-  
-  //   // if (checker(allCurrentLevelSubmissions, allCurrentLevelSongs)) {
-  //   //   let temp = userLevel + 1
-  //   //   const docRef = doc(db, 'userProfiles', userID)
-  //   //   let docSnap = await getDoc(docRef);
-  //   //   clearData()
-  //   //   getUserData(docSnap)
-  //   //   getSongs(temp)
-  //   // } 
-  // }
 
   // CLEAR DISPLAY ON LOG OUT, OR TO RESET PAGE ON LEVEL CHANGES
 export function clearData(comps) {

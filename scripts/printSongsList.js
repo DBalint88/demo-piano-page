@@ -1,4 +1,5 @@
 import { determineSongValue } from "./userInterface.js";
+import { clearData } from "./userInterface.js";
 
 // FETCH SONGS APPROPRIATE TO THE USER'S LEVEL
 
@@ -105,5 +106,37 @@ export function printSongsList (comps, displayState, userProfile, callSongList, 
         });
   
       }
+    }
+  }
+
+  export function checkUserProgress(comps, userProfile, songData) {
+    let allCurrentLevelSongs = []
+    
+    for (const song of userProfile.viewableSongs[userProfile.level - 1])  {
+        if (song.level == userProfile.level) {
+          allCurrentLevelSongs.push(song.fbRef)
+        }
+    }
+  
+    console.log("allCurrentLevelSongs = " + allCurrentLevelSongs);
+  
+    let completedSongsPlusPendingSongs = userProfile.completedSongs.concat(userProfile.pendingSongs)
+    console.log("completedSongsPlusPendingSongs = " +completedSongsPlusPendingSongs)
+  
+    function checker(arr, target) {
+      return target.every(function (arr, v) {
+          return arr.includes(v);
+        });
+    }
+  
+    // if all of the songs at the user's current level are COMPLETE, user's level is advanced and the song list re-loaded.
+    if (checker(userProfile.completeSongs, allCurrentLevelSongs)) {
+      userProfile.level += 1;
+      clearData(comps)
+      getSongs(userProfile.level, songData)
+    // if all of the songs at the user's current level are either complete or pending, and at least some are pending, user should be granted access to the next level, without advancing their profile level.
+    } else if (checker(completedSongsPlusPendingSongs, allCurrentLevelSongs)) {
+      clearData(comps)
+      getSongs(userProfile.level, songData)
     }
   }
