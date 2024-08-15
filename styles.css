@@ -1,331 +1,351 @@
 * {
-    box-sizing: border-box;
-      color: white;
-    }
-    
-    
-    body {
-      display: grid;
-      justify-items: center;
-      background-color: black;
-      margin: 0;
-    }
-    
-    
-    #googleSignIn {
-      margin: auto;
-      display: flex;
-      height: 3rem;
-      width: 12rem;
-      background-color: black;
-      font-size: 1rem;
-      border-radius: .5rem;
-      padding: 0;
-    
-      justify-content: space-around;
-      align-items: center;
-    
-    }
-    
-    #googleSignIn > img {
-      height: 1.5rem;
-    }
-    
-    #signoutButton {
-      margin: auto;
-      display: none;
-      height: 3rem;
-      width: 12rem;
-      background-color: black;
-      font-size: 1rem;
-      font-weight: bolder;
-      border-radius: .5rem;
-      padding: 0;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    #loading-gif {
-      height: 3rem;
-      margin: auto;
-      display: none;
-      border-top: .5rem solid black;
-      border-bottom: .5rem solid black;
-    }
-    
-    #content-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 3fr;
-      grid-template-rows: 8fr 1fr 1fr;
-      grid-template-areas: 
-        "nav main"
-        "quota main"
-        "buttons main";
-      gap: .5rem;
-      background-color: rgb(0, 70, 0);
-      width: 100%;
-      max-width: 1349px;
-      height: 100vh;
-      border-radius: 1rem;
-      padding: .5rem;
-    
-      }
-    
-    
-    
-    /* Nav Stuff */
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    nav {
-      grid-area: nav;
-      background-color: black;
-      position: relative;
-      display: grid;
-      grid-template-columns: 100%;
-      grid-template-rows: 1fr 2rem;
-      align-items: center;
-      color: black;
-      border-radius: 1rem;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      overflow: hidden;
-      }
-    
-    #nav-list-wrapper {
-      height: 100%;
-      width: 100%;
-      position: relative;
-      overflow-x: hidden;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    
-    }
-    
-    #level-list {
-      width: 100%;
-      height: fit-content;
-      transition: .25s linear;
-      position: absolute;
-    }
-    
-    .song-list {
-      width: 100%;
-      height: fit-content;
-      position: absolute;
-      left: 400px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      transition: .25s linear;
-    }
-    
-    .song-list-loading {
-      display: flex;
-      
-    }
-    
-    .active-song-list {
-      display: flex;
-      transform: translateY(-50%) translate(-400px);
-    }
-    
-    .active-song-list-short-screen {
-      display: flex;
-      top: 0;
-      transform: translate(-400px);
-    }
-    
-    
-    /* This has nothing to do with song lists */
-    .inactive-level-list {
-      transform: translate(-400px);
-    }
-    
-    
-    nav ul li {
-      font-weight: bolder;
-    }
-    
-    .song-button {
-      cursor: pointer;
-    }
-    
-    
-    
-    #back-button {
-      cursor: default;
-      position: relative;
-      left: 400px;
-      transition: .25s linear;
-    }
-    
-    .back-button-active {
-      cursor: pointer !important;
-      transform: translate(-400px);
-    }
-    
-    
-    main {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      grid-area: main;
-      background-color: black;
-      border-radius: 1rem;
-      width: 100%;
-      text-align: center;
-      }
-    
-    .level-list {
-      display: none;
-    }
-    
-    h2 {
-      margin-bottom: 0;
-    }
-    
-    h4 {
-      margin-top: .2rem;
-    }
-    
-    .level-button {
-      cursor: pointer;
-    }
-    
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    
-    ol {
-      padding: 0 
-    } 
-    
-    ol li { 
-      list-style-position: inside; 
-    }
-    
-    li {
-      margin: auto;
-      margin-bottom: 1rem;
-    }
-    
-    #quota-panel {
-      border-radius: 1rem;
-      padding: .5rem;
-      width: 100%;
-      height: 100%;
-      background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-    
-    #quota-text {
-      font-size: 1.3rem;
-    }
-    
-    #buttons-panel {
-      grid-area: buttons;
-      display: grid;
-      grid-template-columns: 25% 25% 25% 25%;
-      border-radius: 1rem;
-      padding: .5rem;
-      width: 100%;
-      height: 100%;
-      background-color: black;
-    }
-    
-    #buttons-panel a {
-      
-      border-radius: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    #buttons-panel img {
-      width: 70%;
-    }
-    #buttons-panel div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    #home-button, #submit-button {
-      cursor: pointer;
-    }
-    
-    #yt-icon, #pdf-icon, #submit-button  {
-      opacity: .2;
-    }
-    
-    #splash {
-      display: block;
-      text-align: center;
-    }
-    
-    iframe {
-      width: 0;
-      height: 0;
-      border-radius: 1rem;
-    }
-    
-    .status-icon {
-      height: .7rem;
-      margin-left: .5rem;
-      border-radius: 50%;
-    }
-    
-    
-    
-    /* The Modal (background) */
-    .modal {
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-    }
-    
-    /* Modal Content/Box */
-    .modal-content {
-      background-color: lightgreen;
-      border-radius: 100rem;
-      border: 3px solid grey;
-      margin: 15% auto; /* 15% from the top and centered */
-      padding: 20px;
-      width: 80%; /* Could be more or less, depending on screen size */
-      text-align: center;
-      font-size: 1.5rem;
-    }
-    
-    .modal-content button {
-      color: black;
-      background-color: white;
-      margin: 0 2rem 0 2rem;
-      width: 30%;
-      font-size: 1.5rem;
-      height: 6rem;
-    }
-    
-    .modal-content p {
-      color: black;
-    }
+box-sizing: border-box;
+  color: white;
+}
+
+
+body {
+  display: grid;
+  justify-items: center;
+  background-color: black;
+  margin: 0;
+}
+
+
+#googleSignIn {
+  margin: auto;
+  display: flex;
+  height: 3rem;
+  width: 12rem;
+  background-color: black;
+  font-size: 1rem;
+  border-radius: .5rem;
+  padding: 0;
+
+  justify-content: space-around;
+  align-items: center;
+
+}
+
+#googleSignIn > img {
+  height: 1.5rem;
+}
+
+#signoutButton {
+  margin: auto;
+  display: none;
+  height: 3rem;
+  width: 12rem;
+  background-color: black;
+  font-size: 1rem;
+  font-weight: bolder;
+  border-radius: .5rem;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+#loading-gif {
+  height: 3rem;
+  margin: auto;
+  display: none;
+  border-top: .5rem solid black;
+  border-bottom: .5rem solid black;
+}
+
+#content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 8fr 1fr 1fr;
+  grid-template-areas: 
+    "nav main"
+    "quota main"
+    "buttons main";
+  gap: .5rem;
+  background-color: rgb(0, 70, 0);
+  width: 100%;
+  max-width: 1349px;
+  height: 100vh;
+  border-radius: 1rem;
+  padding: .5rem;
+
+  }
+
+
+
+/* Nav Stuff */
+
+
+
+
+
+
+
+
+
+nav {
+  grid-area: nav;
+  background-color: black;
+  position: relative;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 1fr 2rem;
+  align-items: center;
+  color: black;
+  border-radius: 1rem;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+  }
+
+#nav-list-wrapper {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+#level-list {
+  width: 100%;
+  height: fit-content;
+  transition: .25s linear;
+  position: absolute;
+}
+
+.song-list {
+  width: 100%;
+  height: fit-content;
+  position: absolute;
+  left: 400px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  transition: .25s linear;
+}
+
+.song-list-loading {
+  display: flex;
+  
+}
+
+.active-song-list {
+  display: flex;
+  transform: translateY(-50%) translate(-400px);
+}
+
+.active-song-list-short-screen {
+  display: flex;
+  top: 0;
+  transform: translate(-400px);
+}
+
+
+/* This has nothing to do with song lists */
+.inactive-level-list {
+  transform: translate(-400px);
+}
+
+
+nav ul li {
+  font-weight: bolder;
+}
+
+.song-button {
+  cursor: pointer;
+}
+
+
+
+#back-button {
+  cursor: default;
+  position: relative;
+  left: 400px;
+  transition: .25s linear;
+}
+
+.back-button-active {
+  cursor: pointer !important;
+  transform: translate(-400px);
+}
+
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-area: main;
+  background-color: black;
+  border-radius: 1rem;
+  width: 100%;
+  text-align: center;
+  }
+
+.level-list {
+  display: none;
+}
+
+h2 {
+  margin-bottom: 0;
+}
+
+h4 {
+  margin-top: .2rem;
+}
+
+.level-button {
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ol {
+  padding: 0 
+} 
+
+ol li { 
+  list-style-position: inside; 
+}
+
+li {
+  margin: auto;
+  margin-bottom: 1rem;
+}
+
+#quota-panel {
+  border-radius: 1rem;
+  padding: .5rem;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+#quota-text {
+  font-size: 1.3rem;
+}
+
+#buttons-panel {
+  grid-area: buttons;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  border-radius: 1rem;
+  padding: .5rem;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+#buttons-panel a {
+  
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#buttons-panel img {
+  width: 70%;
+}
+#buttons-panel div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#home-button, #submit-button {
+  cursor: pointer;
+}
+
+#yt-icon, #pdf-icon, #submit-button  {
+  opacity: .2;
+}
+
+#splash {
+  display: block;
+  text-align: center;
+}
+
+iframe {
+  width: 0;
+  height: 0;
+  border-radius: 1rem;
+}
+
+.status-icon {
+  height: .7rem;
+  margin-left: .5rem;
+  border-radius: 50%;
+}
+
+
+
+/* The Modal (background) */
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: lightgreen;
+  border-radius: 100rem;
+  border: 3px solid grey;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  width: 80%; /* Could be more or less, depending on screen size */
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.modal-content button {
+  color: black;
+  background-color: white;
+  margin: 0 2rem 0 2rem;
+  width: 30%;
+  font-size: 1.5rem;
+  height: 6rem;
+}
+
+.modal-content p {
+  color: black;
+}
+
+
+
+#view-swap-button {
+  position: fixed;
+  bottom: 4%;
+  right: 4%;
+  font-size: 1.2rem;
+  border-radius: 1.5rem;
+  padding: 1rem;
+  background-color: white;
+  color:black;
+  border: 2px solid grey;
+  border-style: outset;
+}
+
+#view-swap-button:active {
+  transform: scale(0.98);
+  border-style: inset;
+}
