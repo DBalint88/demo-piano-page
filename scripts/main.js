@@ -1,13 +1,15 @@
+
+import { userProfile } from './userProfile.js';
+import { songData } from './songData.js';
+import { setWeek } from './setWeek.js';
+import { submissionBank } from './submissionBank.js';
+
 import { activateUI, callSongList, hideSongList, adjustListPosition, goHome, updateButtons, updateQuotaDisplay, clearData, loadSong, determineSongValue } from './userInterface.js'
 import { comps } from './comps.js';
-import { songData } from './songData.js';
-import { submissionBank } from './submissionBank.js';
-import { userProfile } from './userProfile.js';
-import { setWeek } from './setWeek.js';
-import { instructorModal, instructorChoice } from './instructorModal.js';
 import { getSongs, printSongsList, checkUserProgress } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
 import { displayState } from './displayState.js'
+import { buildSubmissionLists } from './teacherView.js';
 
 // View Swapping functionality:
 
@@ -16,11 +18,14 @@ let viewStatus = 'student';
 
 comps.viewSwapButton.addEventListener('click', function() {
   if (viewStatus == 'student') {
+    buildSubmissionLists(comps, submissionBank, userProfile, displayState);
     comps.studentContentWrapper.style.display = 'none';
     comps.teacherContentWrapper.style.display = 'block';
     comps.viewSwapButton.innerText = 'Click for Student View'
     viewStatus = 'teacher';
   } else if (viewStatus =='teacher') {
+    updateStatusLights(userProfile)
+    updateQuotaDisplay(displayState, userProfile, submissionBank)
     comps.teacherContentWrapper.style.display = 'none';
     comps.studentContentWrapper.style.display = 'grid';
     comps.viewSwapButton.innerText = 'Click for Teacher View'
@@ -28,98 +33,8 @@ comps.viewSwapButton.addEventListener('click', function() {
   }
 });
 
-//Teacher view script:
-
-const unresolvedRecordWrapper = document.getElementById("unresolved-record-wrapper")
-const resolvedRecordWrapper = document.getElementById("resolved-record-wrapper")
-
-function buildActiveList() {
-  for (sub of submissionBank) {
-    if (sub.resolved = false) {
-      let record = document.createElement('tr')
-
-        let timeStamp = document.createElement('td')
-        timeStamp.textContent = sub.timeStamp.toDate().toLocaleDateString('en-us', { weekday: "short", month: "short", day: "numeric"  })
-        timeStamp.classList.add("center-align")
-
-        let week = document.createElement('td')
-        week.textContent = sub.week - 22
-        week.classList.add("center-align")
-
-        let lastName = document.createElement('td')
-        lastName.textContent = sub.lastName
-        lastName.classList.add("left-align")
-
-        let firstName = document.createElement('td')
-        firstName.textContent = sub.firstName
-        firstName.classList.add("left-align")
-
-        let songLevel = document.createElement('td')
-        songLevel.textContent = sub.songLevel
-        songLevel.classList.add("center-align")
-
-        let songSeq = document.createElement('td')
-        songSeq.textContent = sub.songSeq
-        songSeq.classList.add("center-align")
-
-        let songTitle = document.createElement('td')
-        songTitle.textContent = sub.songTitle
-        songTitle.classList.add("center-align")
-        
-        let pointValue = document.createElement('td')
-        pointValue.textContent = sub.pointValue
-        pointValue.classList.add("center-align")
-
-        let gradeFormCell = document.createElement('td')
-        gradeFormCell.classList.add("center-align")
-        let gradeForm = document.createElement('form')
-
-        let formLabelPass = document.createElement('label')
-        formLabelPass.setAttribute("for", "pass")
-        formLabelPass.textContent = "Pass"
-        let formInputPass = document.createElement('input')
-        formInputPass.setAttribute("type", "radio")
-        formInputPass.setAttribute("name", "passfail")
-        formInputPass.setAttribute("value", "pass")
-        formInputPass.required = true
-
-        let formLabelFail = document.createElement('label')
-        formLabelFail.setAttribute("for", "fail")
-        formLabelFail.textContent = "Fail"
-        let formInputFail = document.createElement('input')
-        formInputFail.setAttribute("type", "radio")
-        formInputFail.setAttribute("name", "passfail")
-        formInputFail.setAttribute("value", "fail")
-
-        let formButton = document.createElement('button')
-        formButton.textContent = "Confirm"
-        gradeForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            // processFeedback(event, sub.id, sub.songfbRef, sub.userID, gradeForm.passfail.value)
-        })
-
-        gradeFormCell.appendChild(gradeForm)
-        gradeForm.appendChild(formInputPass)
-        gradeForm.appendChild(formLabelPass)
-        gradeForm.appendChild(formInputFail)
-        gradeForm.appendChild(formLabelFail)
-        gradeForm.appendChild(formButton)
-
-        unresolvedRecordWrapper.appendChild(record)
-        record.appendChild(timeStamp)
-        record.appendChild(week)
-        record.appendChild(lastName)
-        record.appendChild(firstName)
-        record.appendChild(songLevel)
-        record.appendChild(songSeq)
-        record.appendChild(songTitle)
-        record.appendChild(pointValue)
-        record.appendChild(gradeFormCell)
-    }
-  }
 
 
-}
 
 
 

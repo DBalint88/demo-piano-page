@@ -1,8 +1,10 @@
-export function buildSubmissionLists(comps, submissionBank, userProfile) {
+import { updateStatusLights } from "./updateStatusLights.js";
+import { updateQuotaDisplay } from "./userInterface.js";
+
+export function buildSubmissionLists(comps, submissionBank, userProfile, displayState) {
+    wipeSubmissionDisplay(comps)
     for (const sub of submissionBank) {
         if (sub.resolved == false) {
-            console.log("buildSubmissionLists:");
-            console.log(sub);
             let record = document.createElement('tr')
 
             let timeStamp = document.createElement('td')
@@ -62,9 +64,9 @@ export function buildSubmissionLists(comps, submissionBank, userProfile) {
             formButton.textContent = "Confirm"
             gradeForm.addEventListener("submit", (event) => {
                 event.preventDefault();
-                processFeedback(sub.submissionID, sub.songfbRef, gradeForm.passfail.value, userProfile, submissionBank)
-                wipeSubmissionDisplay(comps)
-                buildSubmissionLists(comps, submissionBank)
+                console.log(userProfile)
+                processFeedback(sub.submissionID, sub.songfbRef, userProfile, gradeForm.passfail.value, submissionBank)
+                buildSubmissionLists(comps, submissionBank, userProfile, displayState)
             })
 
             gradeFormCell.appendChild(gradeForm)
@@ -163,10 +165,12 @@ export function buildSubmissionLists(comps, submissionBank, userProfile) {
             record.appendChild(gradeFormCell)
         }
     }
+    console.log("userProfile:")
+    console.log(userProfile)
 }
 
-export function processFeedback(id, songfbRef, passfail, userProfile, submissionBank) {
-
+export function processFeedback(id, songfbRef, userProfile, passfail, submissionBank) {
+    console.log(userProfile)
     userProfile.pendingSongs.splice(userProfile.pendingSongs.indexOf(songfbRef), 1)
 
     if (passfail == "pass") {
@@ -176,15 +180,11 @@ export function processFeedback(id, songfbRef, passfail, userProfile, submission
         userProfile.completedSongs.push(songfbRef)
 
         for (let sub of submissionBank) {
-            console.log("pass! ")
-            console.log(sub)
-            if (sub.submissionID = id) {
+            if (sub.submissionID == id) {
                 sub.resolved = true;
                 sub.result = "pass";
-                sub.timeStap = new Date();
+                sub.timeStamp = new Date();
             }
-            console.log("pass!2 ")
-            console.log(sub)
         }
     }
 
@@ -193,10 +193,10 @@ export function processFeedback(id, songfbRef, passfail, userProfile, submission
             userProfile.failedSongs.push(songfbRef)
         }
         for (let sub of submissionBank) {
-            if (sub.submissionID = id) {
+            if (sub.submissionID == id) {
                 sub.resolved = true;
                 sub.result = "fail";
-                sub.timeStap = new Date();
+                sub.timeStamp = new Date();
             }
         }
     }
@@ -205,5 +205,8 @@ export function processFeedback(id, songfbRef, passfail, userProfile, submission
 export function wipeSubmissionDisplay(comps) {
     while(comps.unresolvedRecordWrapper.children.length > 1) {
         comps.unresolvedRecordWrapper.removeChild(comps.unresolvedRecordWrapper.lastChild)
+    }
+    while(comps.resolvedRecordWrapper.children.length > 1) {
+        comps.resolvedRecordWrapper.removeChild(comps.resolvedRecordWrapper.lastChild)
     }
 }

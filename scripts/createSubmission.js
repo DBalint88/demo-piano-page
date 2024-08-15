@@ -1,7 +1,6 @@
 import { updateButtons, updateQuotaDisplay } from "./userInterface.js";
 import { updateStatusLights } from "./updateStatusLights.js";
 import { checkUserProgress } from "./printSongsList.js";
-import { buildSubmissionLists } from "./teacherView.js";
 
 export function submitSong(comps, displayState, userProfile, submissionBank, songData, callSongList, loadSong, printSongsList) {
 
@@ -22,23 +21,16 @@ export function submitSong(comps, displayState, userProfile, submissionBank, son
     if (confirm("Are you sure you want to resubmit " + currentSongTitle + "?")) {
       pendingSongs.push(currentSongFbref)
       submissionBank.push(createSubmission(displayState, userProfile, submissionBank))
-      // if (currentSongLevel == userLevel) {
-      //   // updateSongListLive()
-      // }
     }
 
   } else if (!completedSongs.includes(currentSongFbref)) {
     if (confirm("Are you sure you want to submit " + currentSongTitle + "?")) {
       pendingSongs.push(currentSongFbref)
       submissionBank.push(createSubmission(displayState, userProfile, submissionBank))
-      console.log(submissionBank)
-      // if (currentSongLevel == userLevel) {
-      //   // updateSongListLive()
-      // }
     }
   }
+  console.log("Current state of submission bank: ")
   console.log(submissionBank)
-  buildSubmissionLists(comps, submissionBank, userProfile);
   updateStatusLights(userProfile);
   updateButtons(comps, displayState, userProfile);
   updateQuotaDisplay(displayState, userProfile, submissionBank);
