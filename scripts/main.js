@@ -21,6 +21,11 @@ comps.loginButton.addEventListener('click', () => {
     comps.logoutButton.style.display = 'flex'
     userProfile.viewableSongs = getSongs(userProfile.level, songData);
     printSongsList(comps, displayState, userProfile, callSongList, loadSong);
+    if (checkUserProgress(comps, userProfile, songData, displayState)) {
+      printSongsList (comps, displayState, userProfile, callSongList, loadSong)
+      updateStatusLights(userProfile);
+      updateQuotaDisplay(displayState, userProfile, submissionBank);
+    }
     updateQuotaDisplay(displayState, userProfile, submissionBank)
     updateStatusLights(userProfile);
     adjustListPosition(comps)
