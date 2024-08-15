@@ -15,5 +15,8 @@ export const comps = {
     loadingGif: document.getElementById("loading-gif"),
     splashGreeting: document.getElementById("splash-greeting"),
     balintButton: document.createElement("button"),
-    rossButton: document.createElement("button")
+    rossButton: document.createElement("button"),
+    viewSwapButton: document.getElementById("view-swap-button"),
+    studentContentWrapper: document.getElementById("student-content-wrapper"),
+    teacherContentWrapper: document.getElementById("teacher-content-wrapper")
 }

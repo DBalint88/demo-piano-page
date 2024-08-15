@@ -7,8 +7,28 @@ import { setWeek } from './setWeek.js';
 import { instructorModal, instructorChoice } from './instructorModal.js';
 import { getSongs, printSongsList, checkUserProgress } from './printSongsList.js';
 import { updateStatusLights } from './updateStatusLights.js';
-
 import { displayState } from './displayState.js'
+
+// View Swapping functionality:
+
+let viewStatus = 'student';
+
+
+comps.viewSwapButton.addEventListener('click', function() {
+  if (viewStatus == 'student') {
+    comps.studentContentWrapper.style.display = 'none';
+    comps.teacherContentWrapper.style.display = 'block';
+    comps.viewSwapButton.innerText = 'Click for Student View'
+    viewStatus = 'teacher';
+  } else if (viewStatus =='teacher') {
+    comps.teacherContentWrapper.style.display = 'none';
+    comps.studentContentWrapper.style.display = 'grid';
+    comps.viewSwapButton.innerText = 'Click for Teacher View'
+    viewStatus = 'student';
+  }
+});
+
+
 
 // Set the week number (All submissions are due Friday of each week.)
 displayState.currentWeek = setWeek();

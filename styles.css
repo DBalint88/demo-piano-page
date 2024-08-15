@@ -53,7 +53,7 @@ body {
   border-bottom: .5rem solid black;
 }
 
-#content-wrapper {
+#student-content-wrapper {
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: 8fr 1fr 1fr;
@@ -69,7 +69,17 @@ body {
   border-radius: 1rem;
   padding: .5rem;
 
-  }
+}
+
+#teacher-content-wrapper {
+  background-color: black;
+  border: .5rem solid rgb(0,70,0);
+  width: 100%;
+  max-width: 1349px;
+  height: 100vh;
+  border-radius: 1rem;
+  padding: .5rem;
+}
 
 
 
@@ -334,18 +344,16 @@ iframe {
 
 #view-swap-button {
   position: fixed;
-  bottom: 4%;
-  right: 4%;
-  font-size: 1.2rem;
+  bottom: 3%;
+  right: 1%;
+  font-size: 1.3rem;
   border-radius: 1.5rem;
-  padding: 1rem;
+  padding: 1.2rem;
   background-color: white;
   color:black;
-  border: 2px solid grey;
-  border-style: outset;
+  border: .4rem solid rgb(0, 70, 0);
 }
 
 #view-swap-button:active {
-  transform: scale(0.98);
-  border-style: inset;
+  transform: scale(0.95);
 }
